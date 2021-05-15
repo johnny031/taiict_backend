@@ -20,13 +20,13 @@ cursor = db.cursor()
 
 cursor.execute("SELECT * FROM Person")
 
+list = []
 for x in cursor:
-    print(x)
+    list.append(x)
 
 @app.route('/')
 def hello():
-    for x in cursor:
-        return f'Hello, Heroku! {x}'
+    return f'Hello, Heroku! {list[0]}'
 
 if __name__ == 'main':
     app.run()
