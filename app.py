@@ -11,7 +11,7 @@ db = mysql.connector.connect(
     passwd = "a3415195",
     database = "heroku_d6918b07f609b9c"
 )
-
+ 
 cursor = db.cursor()
 
 # cursor.execute("DROP TABLE Note")
