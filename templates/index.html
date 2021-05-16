@@ -22,10 +22,13 @@
       <input name="note" type="text" />
       <button type="submit">Add note</button>
     </form>
+    <br />
+    <div id="all-notes"></div>
   </body>
   <script>
     let list = {{ list | tojson}};
     console.log(list)
+    document.querySelector("#all-notes").innerHTML = list;
   </script>
   <script src="{{ url_for('static', filename='index.js') }}"></script>
 </html>
