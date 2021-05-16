@@ -13,7 +13,6 @@ db = mysql.connector.connect(
 )
 
 cursor = db.cursor()
-cursor1 = db.cursor()
 
 # cursor.execute("DROP TABLE Note")
 # cursor.execute("CREATE TABLE Note (note VARCHAR(50),name VARCHAR(50), noteID int PRIMARY KEY AUTO_INCREMENT)")
@@ -50,7 +49,7 @@ def delete_note():
     note = json.loads(request.data)
     noteId = note["noteId"]
     
-    cursor1.execute(f"DELETE FROM Note WHERE noteId = {noteId}")
+    cursor.execute(f"DELETE FROM Note WHERE noteId = {noteId}")
     db.commit()
 
     return jsonify({})
