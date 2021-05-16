@@ -48,7 +48,7 @@ def hello():
     for x in cursor:
         list.append(x)
     print(list) 
-
+    cursor.close()
     return render_template("index.html", list=list)
 
 @app.route('/delete-note', methods=["POST"])
@@ -59,6 +59,7 @@ def delete_note():
     
     cursor.execute(f"DELETE FROM Note WHERE noteId = {noteId}")
     db.commit()
+    cursor.close()
     return jsonify({})
 
 if __name__ == 'main':
