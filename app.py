@@ -18,6 +18,8 @@ db = mysql.connector.connect(
     passwd = "8XlyxUFPDf",
     database = "hYVZeathwy"
 )
+ 
+cursor = db.cursor()
 
 # cursor.execute("DROP TABLE Note")
 # cursor.execute("CREATE TABLE Note (note VARCHAR(50),name VARCHAR(50), noteID int PRIMARY KEY AUTO_INCREMENT)")
@@ -36,7 +38,6 @@ db = mysql.connector.connect(
 
 @app.route('/', methods=["GET", "POST"])
 def hello():
-    cursor = db.cursor()
     if request.method == "POST":
         note = request.form.get("note")
         if len(note) > 0:
@@ -48,18 +49,16 @@ def hello():
     for x in cursor:
         list.append(x)
     print(list) 
-    cursor.close()
+
     return render_template("index.html", list=list)
 
 @app.route('/delete-note', methods=["POST"])
 def delete_note():
-    cursor = db.cursor()
     note = json.loads(request.data)
     noteId = note["noteId"]
     
     cursor.execute(f"DELETE FROM Note WHERE noteId = {noteId}")
     db.commit()
-    cursor.close()
     return jsonify({})
 
 if __name__ == 'main':
