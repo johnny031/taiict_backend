@@ -52,7 +52,11 @@ def delete_note():
     cursor.execute(f"DELETE FROM Note WHERE noteId = {noteId}")
     db.commit()
 
-    return jsonify({})
+    cursor.execute("SELECT * FROM Note")
+    list = []
+    for x in cursor:
+        list.append(x)
+    return render_template("index.html", list=list)
 
 if __name__ == 'main':
     app.run()
