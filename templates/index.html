@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Note</title>
+  </head>
+  <body>
+    <h1>Note</h1>
+    <ul>
+      {% for item in list %}
+      <li>
+        {{ item[0] }}
+        <button onClick="deleteNote({{ item[2] }})">
+          <span>&times;</span>
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
+    <form method="post">
+      <input name="note" type="text" />
+      <button type="submit">Add note</button>
+    </form>
+  </body>
+  <script>
+    let list = {{ list | tojson}};
+    console.log(list)
+  </script>
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
+</html>
