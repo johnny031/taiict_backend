@@ -4,25 +4,6 @@ import json
 
 app = Flask(__name__)
 
-
-db = mysql.connector.connect(
-    # heroku cleardb database
-    # host = "us-cdbr-east-03.cleardb.com",
-    # user = "bffbfcd0c09f06",
-    # passwd = "a3415195",
-    # database = "heroku_d6918b07f609b9c"
-
-    # remote mysql database
-    host = "remotemysql.com",
-    user = "hYVZeathwy",
-    passwd = "8XlyxUFPDf",
-    database = "hYVZeathwy",
-    pool_recycle=60,
-    convert_unicode=True
-)
- 
-cursor = db.cursor()
-
 # cursor.execute("DROP TABLE Note")
 # cursor.execute("CREATE TABLE Note (note VARCHAR(50),name VARCHAR(50), noteID int PRIMARY KEY AUTO_INCREMENT)")
 # cursor.execute("INSERT INTO Note (note, name) VALUES (%s, %s)", ("First note", "John"))
@@ -40,6 +21,20 @@ cursor = db.cursor()
 
 @app.route('/', methods=["GET", "POST"])
 def hello():
+    db = mysql.connector.connect(
+        # heroku cleardb database
+        # host = "us-cdbr-east-03.cleardb.com",
+        # user = "bffbfcd0c09f06",
+        # passwd = "a3415195",
+        # database = "heroku_d6918b07f609b9c"
+
+        # remote mysql database
+        host = "remotemysql.com",
+        user = "hYVZeathwy",
+        passwd = "8XlyxUFPDf",
+        database = "hYVZeathwy"
+    )
+    cursor = db.cursor()
     if request.method == "POST":
         note = request.form.get("note")
         if len(note) > 0:
@@ -51,16 +46,32 @@ def hello():
     for x in cursor:
         list.append(x)
     print(list) 
-
+    cursor.close()
+    db.close()
     return render_template("index.html", list=list)
 
 @app.route('/delete-note', methods=["POST"])
 def delete_note():
+    db = mysql.connector.connect(
+        # heroku cleardb database
+        # host = "us-cdbr-east-03.cleardb.com",
+        # user = "bffbfcd0c09f06",
+        # passwd = "a3415195",
+        # database = "heroku_d6918b07f609b9c"
+
+        # remote mysql database
+        host = "remotemysql.com",
+        user = "hYVZeathwy",
+        passwd = "8XlyxUFPDf",
+        database = "hYVZeathwy"
+    )
+    cursor = db.cursor()
     note = json.loads(request.data)
     noteId = note["noteId"]
-    
     cursor.execute(f"DELETE FROM Note WHERE noteId = {noteId}")
     db.commit()
+    cursor.close()
+    db.close()
     return jsonify({})
 
 if __name__ == 'main':
