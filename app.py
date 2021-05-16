@@ -33,10 +33,10 @@ cursor = db.cursor()
 def hello():
     if request.method == "POST":
         note = request.form.get("note")
-        if note:
+        if len(note) > 0:
             cursor.execute("INSERT INTO Note (note, name) VALUES (%s, %s)", (note, "John"))
             db.commit()
-
+            
     cursor.execute("SELECT * FROM Note")
     list = []
     for x in cursor:
