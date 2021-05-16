@@ -16,7 +16,9 @@ db = mysql.connector.connect(
     host = "remotemysql.com",
     user = "hYVZeathwy",
     passwd = "8XlyxUFPDf",
-    database = "hYVZeathwy"
+    database = "hYVZeathwy",
+    pool_recycle=60,
+    convert_unicode=True
 )
  
 cursor = db.cursor()
