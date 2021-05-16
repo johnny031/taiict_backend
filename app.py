@@ -6,10 +6,17 @@ app = Flask(__name__)
 
 
 db = mysql.connector.connect(
-    host = "us-cdbr-east-03.cleardb.com",
-    user = "bffbfcd0c09f06",
-    passwd = "a3415195",
-    database = "heroku_d6918b07f609b9c"
+    # heroku cleardb database
+    # host = "us-cdbr-east-03.cleardb.com",
+    # user = "bffbfcd0c09f06",
+    # passwd = "a3415195",
+    # database = "heroku_d6918b07f609b9c"
+
+    # remote mysql database
+    host = "remotemysql.com",
+    user = "hYVZeathwy",
+    passwd = "8XlyxUFPDf",
+    database = "hYVZeathwy"
 )
  
 cursor = db.cursor()
@@ -41,7 +48,8 @@ def hello():
     list = []
     for x in cursor:
         list.append(x)
-    # print(list) 
+    print(list) 
+
     return render_template("index.html", list=list)
 
 @app.route('/delete-note', methods=["POST"])
