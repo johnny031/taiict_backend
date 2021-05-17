@@ -50,7 +50,7 @@ def hello():
     db.close()
     return render_template("index.html", list=list)
 
-@app.route('/delete-note', methods=["GET","POST"])
+@app.route('/json-data', methods=["GET","POST"])
 @cross_origin()
 def delete_note():
     db = mysql.connector.connect(
