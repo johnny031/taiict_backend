@@ -50,29 +50,28 @@ def hello():
     db.close()
     return render_template("index.html", list=list)
 
-@app.route('/delete-note', methods=["POST"])
+@app.route('/delete-note', methods=["GET","POST"])
 def delete_note():
     db = mysql.connector.connect(
-        # heroku cleardb database
-        # host = "us-cdbr-east-03.cleardb.com",
-        # user = "bffbfcd0c09f06",
-        # passwd = "a3415195",
-        # database = "heroku_d6918b07f609b9c"
-
-        # remote mysql database
         host = "remotemysql.com",
         user = "hYVZeathwy",
         passwd = "8XlyxUFPDf",
         database = "hYVZeathwy"
     )
     cursor = db.cursor()
-    note = json.loads(request.data)
-    noteId = note["noteId"]
-    cursor.execute(f"DELETE FROM Note WHERE noteId = {noteId}")
-    db.commit()
+    if request.method == "POST":
+        note = json.loads(request.data)
+        noteId = note["noteId"]
+        cursor.execute(f"DELETE FROM Note WHERE noteId = {noteId}")
+        db.commit()
+    else:
+        cursor.execute("SELECT * FROM Note")
+        list = []
+        for x in cursor:
+            list.append(x)
     cursor.close()
     db.close()
-    return jsonify({})
+    return jsonify(list)
 
 if __name__ == 'main':
     app.run()
