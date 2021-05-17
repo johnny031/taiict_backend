@@ -1,18 +1,17 @@
 import mysql.connector
 from flask import Flask, request, render_template, jsonify
 from flask_cors import cross_origin
+import datetime
 import json
 
 app = Flask(__name__)
 
-# cursor.execute("DROP TABLE Note")
-# cursor.execute("CREATE TABLE Note (note VARCHAR(50),name VARCHAR(50), noteID int PRIMARY KEY AUTO_INCREMENT)")
-# cursor.execute("INSERT INTO Note (note, name) VALUES (%s, %s)", ("First note", "John"))
-# cursor.execute("INSERT INTO Note (note, name) VALUES (%s, %s)", ("Second note", "Joe"))
-# cursor.execute("INSERT INTO Note (note, name) VALUES (%s, %s)", ("Third note", "Mary"))
+# cursor.execute("DROP TABLE News")
+# cursor.execute("CREATE TABLE News (newsID int PRIMARY KEY AUTO_INCREMENT, author VARCHAR(50) NOT NULL, datetime VARCHAR(50) NOT NULL, title VARCHAR(80) NOT NULL, content VARCHAR(3000) NOT NULL)")
+# cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", ("John", datetime.now(), "First news title", "First news content"))
 # db.commit()
 
-# cursor.execute("SELECT * FROM Note")
+# cursor.execute("SELECT * FROM News")
 
 # list = []
 # for x in cursor:
@@ -36,12 +35,15 @@ def hello():
     )
     cursor = db.cursor()
     if request.method == "POST":
-        note = request.form.get("note")
-        if len(note) > 0:
-            cursor.execute("INSERT INTO Note (note, name) VALUES (%s, %s)", (note, "John"))
+        author = request.form.get("author")
+        title = request.form.get("title")
+        content = request.form.get("content")
+        if len(author) > 0 and len(title) > 0 and len(content) > 0:
+            datetime_str = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+            cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", (author, datetime_str, title, content))
             db.commit()
             
-    cursor.execute("SELECT * FROM Note")
+    cursor.execute("SELECT * FROM News")
     list = []
     for x in cursor:
         list.append(x)
@@ -61,18 +63,22 @@ def delete_note():
     )
     cursor = db.cursor()
     if request.method == "POST":
-        note = json.loads(request.data)
-        noteId = note["noteId"]
-        cursor.execute(f"DELETE FROM Note WHERE noteId = {noteId}")
+        news = json.loads(request.data)
+        newsId = news["newsId"]
+        cursor.execute(f"DELETE FROM News WHERE newsId = {newsId}")
         db.commit()
+        cursor.close()
+        db.close()
+        return jsonify({})
     else:
-        cursor.execute("SELECT * FROM Note")
+        cursor.execute("SELECT * FROM News")
         list = []
         for x in cursor:
             list.append(x)
-    cursor.close()
-    db.close()
-    return jsonify(list)
+        cursor.close()
+        db.close()
+        return jsonify(list)
+    
 
 if __name__ == 'main':
     app.run()

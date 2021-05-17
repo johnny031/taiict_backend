@@ -1,7 +1,7 @@
-function deleteNote(noteId) {
+function deleteNews(newsId) {
   fetch("/json-data", {
     method: "POST",
-    body: JSON.stringify({ noteId: noteId }),
+    body: JSON.stringify({ newsId: newsId }),
   }).then((_res) => {
     window.location.href = "/";
   });
