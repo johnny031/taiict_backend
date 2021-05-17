@@ -1,8 +1,10 @@
 import mysql.connector
 from flask import Flask, request, render_template, jsonify
+from flask_cors import CORS
 import json
 
 app = Flask(__name__)
+CORS(app)
 
 # cursor.execute("DROP TABLE Note")
 # cursor.execute("CREATE TABLE Note (note VARCHAR(50),name VARCHAR(50), noteID int PRIMARY KEY AUTO_INCREMENT)")
