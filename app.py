@@ -1,7 +1,7 @@
 import mysql.connector
 from flask import Flask, request, render_template, jsonify
 from flask_cors import cross_origin
-import datetime
+from datetime import datetime, timezone, timedelta
 import json
 
 app = Flask(__name__)
@@ -39,7 +39,8 @@ def hello():
         title = request.form.get("title")
         content = request.form.get("content")
         if len(author) > 0 and len(title) > 0 and len(content) > 0:
-            datetime_str = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+            tz = timezone(timedelta(hours=+8))
+            datetime_str = datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
             cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", (author, datetime_str, title, content))
             db.commit()
             
