@@ -1,10 +1,9 @@
 import mysql.connector
 from flask import Flask, request, render_template, jsonify
-from flask_cors import CORS
+from flask_cors import cross_origin
 import json
 
 app = Flask(__name__)
-CORS(app)
 
 # cursor.execute("DROP TABLE Note")
 # cursor.execute("CREATE TABLE Note (note VARCHAR(50),name VARCHAR(50), noteID int PRIMARY KEY AUTO_INCREMENT)")
@@ -19,7 +18,6 @@ CORS(app)
 # for x in cursor:
 #     list.append(x)
 # print(list)
-
 
 @app.route('/', methods=["GET", "POST"])
 def hello():
@@ -53,6 +51,7 @@ def hello():
     return render_template("index.html", list=list)
 
 @app.route('/delete-note', methods=["GET","POST"])
+@cross_origin()
 def delete_note():
     db = mysql.connector.connect(
         host = "remotemysql.com",
