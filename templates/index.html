@@ -4,30 +4,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>News</title>
+    <title>Login</title>
   </head>
   <body>
-    <h1>News</h1>
-    <ul>
-      {% for item in list %}
-      <li>
-        {{ item[1] }}, {{ item[2] }}, {{ item[3] }}, {{ item[4] }}
-        <button onClick="deleteNews({{ item[0] }})">
-          <span>&times;</span>
-        </button>
-      </li>
-      {% endfor %}
-    </ul>
-    <form method="post">
-      <input name="author" type="text" placeholder="author" />
-      <input name="title" type="text" placeholder="title" />
-      <input name="content" type="text" placeholder="content" />
-      <button type="submit">Add news</button>
+    <form action="/" method="POST">
+      <input type="text" name="name" placeholder="name" />
+      <input type="text" name="password" placeholder="password" />
+      <button type="submit">login</button>
     </form>
   </body>
-  <script>
-    let list = {{ list | tojson}};
-    console.log(list)
-  </script>
-  <script src="{{ url_for('static', filename='index.js') }}"></script>
 </html>

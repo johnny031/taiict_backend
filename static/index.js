@@ -3,6 +3,6 @@ function deleteNews(newsId) {
     method: "POST",
     body: JSON.stringify({ newsId: newsId }),
   }).then((_res) => {
-    window.location.href = "/";
+    window.location.href = "/news-list";
   });
 }
