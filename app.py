@@ -1,5 +1,5 @@
 import mysql.connector
-from flask import Flask, request, render_template, jsonify, url_for, redirect
+from flask import Flask, request, render_template, jsonify, url_for, redirect, flash
 from flask_cors import cross_origin
 from flask_login import LoginManager, UserMixin, login_user, current_user, login_required, logout_user
 from datetime import datetime, timezone, timedelta
@@ -12,6 +12,7 @@ app.config["SECRET_KEY"] = "Thisismysecretkeyandsupposenottobeknownfromothers"
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+login_manager.login_message = "您沒有權限，請先登入"
 class User(UserMixin):
     def __init__(self, name, password):
         self.name = name
@@ -70,7 +71,8 @@ def login():
                 login_user(user)
                 return redirect(url_for('news_list'))
             else:
-                return "<h1>Invalid username or password</h1>"
+                flash('使用者名稱或密碼輸入錯誤')
+                return redirect(url_for('login'))
     return render_template("index.html")
 
 @app.route('/news-list', methods=["GET", "POST"])
@@ -92,7 +94,6 @@ def news_list():
             datetime_str = datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
             cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", (author, datetime_str, title, content))
             db.commit()
-            
     cursor.execute("SELECT * FROM News")
     list = []
     for x in cursor:
