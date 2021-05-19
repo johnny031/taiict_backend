@@ -46,18 +46,23 @@ input,
 .add-news-btn {
   height: 3em;
 }
+input::placeholder,
+textarea::placeholder {
+  padding-left: 0.2em;
+}
 .add-news-btn {
   font-weight: bold;
   border: none;
   margin: 1em 0;
   border-radius: 0.6em;
   background-color: rgb(49, 110, 150);
-  color: rgb(207, 233, 245);
+  color: rgb(226, 243, 252);
   cursor: pointer;
 }
 .add-news-btn:hover {
   background-color: rgb(80, 132, 167);
-  color: rgb(241, 241, 241);
+  color: rgb(203, 235, 252);
+  box-shadow: 0.7px 0.7px 1.2px rgb(2, 42, 68);
 }
 form {
   background-color: rgb(245, 245, 245);
@@ -67,17 +72,28 @@ form {
 }
 h4 {
   margin: 1em 0;
+  color: rgb(119, 119, 119);
+}
+.container {
+  margin: 0 1em;
 }
 h1 {
+  color: rgb(99, 99, 99);
   display: inline-block;
+  text-shadow: 2px 2px 4px rgb(194, 194, 194);
+}
+h2 {
+  color: rgb(99, 99, 99);
+  text-shadow: 1px 1px 0 rgb(212, 212, 212);
+  padding-bottom: 0.3em;
 }
 .logout-div {
   float: right;
-  margin: 2em 2em auto auto;
+  margin: 2.3em 0 auto auto;
 }
 .logout-link {
   text-decoration: none;
-  color: rgb(19, 19, 126);
+  color: rgb(6, 21, 150);
 }
 .logout-link:hover {
   color: rgb(102, 102, 206);

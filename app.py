@@ -1,5 +1,5 @@
 import mysql.connector
-from flask import Flask, request, render_template, jsonify, url_for, redirect, flash
+from flask import Flask, request, render_template, jsonify, url_for, redirect, flash, session
 from flask_cors import cross_origin
 from flask_login import LoginManager, UserMixin, login_user, current_user, login_required, logout_user
 from datetime import datetime, timezone, timedelta
@@ -16,7 +16,7 @@ login_manager.login_message = "您沒有權限，請先登入"
 class User(UserMixin):
     def __init__(self, name, password):
         self.name = name
-        self.hash = password
+        self.password = password
 
     @property
     def id(self):
@@ -24,7 +24,8 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(name):
-    return User
+    user = User(name=name, password="")
+    return user
 
 # db = mysql.connector.connect(
 #     host = "remotemysql.com",
@@ -37,9 +38,8 @@ def load_user(name):
 # cursor.execute("CREATE TABLE News (newsID int PRIMARY KEY AUTO_INCREMENT, author VARCHAR(50) NOT NULL, datetime VARCHAR(50) NOT NULL, title VARCHAR(80) NOT NULL, content VARCHAR(3000) NOT NULL)")
 # cursor.execute("CREATE TABLE User (userID int PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, password VARCHAR(80) NOT NULL)")
 # cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", ("John", datetime.now(), "First news title", "First news content"))
-# cursor.execute("INSERT INTO User (name, password) VALUES (%s, %s)", ("John", "taiictpassword"))
+# cursor.execute("INSERT INTO User (name, password) VALUES (%s, %s)", ("Mary", "secrettaiict"))
 # db.commit()
-
 # cursor.execute("SELECT * FROM User")
 # list = []
 # for x in cursor:
@@ -47,6 +47,12 @@ def load_user(name):
 # print(list)
 # cursor.close()
 # db.close()
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(hours=1)
+
 @app.route('/', methods=['GET', 'POST'])  
 def login(): 
     if request.method == "POST":
@@ -100,7 +106,7 @@ def news_list():
         list.append(x)
     cursor.close()
     db.close()
-    return render_template("news.html", list=list)
+    return render_template("news.html", list=list, username=current_user.name)
 
 @app.route('/json-data', methods=["GET","POST"])
 @cross_origin()
