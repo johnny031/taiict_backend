@@ -3,6 +3,7 @@ from flask import Flask, request, render_template, jsonify, url_for, redirect, f
 from flask_cors import cross_origin
 from flask_login import LoginManager, UserMixin, login_user, current_user, login_required, logout_user
 from datetime import datetime, timezone, timedelta
+from werkzeug.security import generate_password_hash, check_password_hash
 import json
 
 app = Flask(__name__)
@@ -34,11 +35,12 @@ def load_user(name):
 #     database = "hYVZeathwy"
 # )
 # cursor = db.cursor()
-# cursor.execute("DROP TABLE User")
+# cursor.execute("DELETE FROM User")
 # cursor.execute("CREATE TABLE News (newsID int PRIMARY KEY AUTO_INCREMENT, author VARCHAR(50) NOT NULL, datetime VARCHAR(50) NOT NULL, title VARCHAR(80) NOT NULL, content VARCHAR(3000) NOT NULL)")
 # cursor.execute("CREATE TABLE User (userID int PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, password VARCHAR(80) NOT NULL)")
 # cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", ("John", datetime.now(), "First news title", "First news content"))
-# cursor.execute("INSERT INTO User (name, password) VALUES (%s, %s)", ("Mary", "secrettaiict"))
+# hashed = generate_password_hash("secrettaiict", method="sha256")
+# cursor.execute("INSERT INTO User (name, password) VALUES (%s, %s)", ("Mary", hashed))
 # db.commit()
 # cursor.execute("SELECT * FROM User")
 # list = []
@@ -66,13 +68,13 @@ def login():
                 database = "hYVZeathwy"
             )
             cursor = db.cursor()
-            cursor.execute(f"SELECT password FROM User WHERE name = '{name}'")
+            cursor.execute(f"SELECT password FROM User WHERE BINARY name = '{name}'")
             list = []
             for x in cursor:
                 list.append(x)
             cursor.close()
             db.close()
-            if len(list)>0 and list[0][0] == password:
+            if len(list)>0 and check_password_hash(list[0][0], password):
                 user = User(name=name, password=password)
                 login_user(user)
                 return redirect(url_for('news_list'))
