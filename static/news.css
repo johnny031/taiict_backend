@@ -1,6 +1,6 @@
 .grid-container {
   display: inline-grid;
-  grid-template-columns: 0.6fr 1fr 1fr 5fr 0.25fr;
+  grid-template-columns: 0.25fr 0.5fr 1.2fr 3.8fr 0.25fr;
   grid-auto-rows: minmax(1.6em, auto);
 }
 .grid-container,
@@ -14,8 +14,8 @@
   padding: 0.2em;
 }
 .news-content {
+  word-break: break-all;
   text-align: start;
-  padding: 0 0.2em;
 }
 .type {
   font-weight: bold;
