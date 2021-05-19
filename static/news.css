@@ -19,7 +19,7 @@
 }
 .type {
   font-weight: bold;
-  color: rgb(241, 241, 241);
+  color: rgb(252, 252, 252);
   background-color: rgb(153, 153, 153);
 }
 .btn-grid {
@@ -78,12 +78,12 @@ h4 {
   margin: 0 1em;
 }
 h1 {
-  color: rgb(99, 99, 99);
+  color: rgb(80, 80, 80);
   display: inline-block;
-  text-shadow: 2px 2px 4px rgb(194, 194, 194);
+  text-shadow: 2px 2px 4px rgb(204, 204, 204);
 }
 h2 {
-  color: rgb(99, 99, 99);
+  color: rgb(83, 83, 83);
   text-shadow: 1px 1px 0 rgb(212, 212, 212);
   padding-bottom: 0.3em;
 }
