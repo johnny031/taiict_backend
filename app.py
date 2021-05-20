@@ -37,7 +37,7 @@ class News(db.Model):
     datetime = db.Column(db.String(50), nullable=False)
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.String(3000), nullable=False)
-
+db.create_all()
 # User.__table__.drop(engine)
 # new_news = News(author="author", title="title", content="content")
 # db.session.add(new_news)
