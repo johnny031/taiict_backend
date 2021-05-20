@@ -12,7 +12,6 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "Thisismysecretkeyandsupposenottobeknownfromothers"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy"
-engine = create_engine('mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy')
 
 db = SQLAlchemy(app)
 
