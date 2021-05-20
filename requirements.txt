@@ -10,6 +10,7 @@ gunicorn==19.9.0
 itsdangerous==1.1.0
 Jinja2==2.10
 MarkupSafe==1.1.0
+mysqlclient==2.0.3
 SQLAlchemy==1.4.15
 Werkzeug==0.14.1
 wincertstore==0.2
