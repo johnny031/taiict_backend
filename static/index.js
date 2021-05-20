@@ -17,19 +17,21 @@ $(document).on("click", ".delete-btn", function () {
   $(this).parent(".btn-grid").remove();
 });
 $(".add-news-btn").on("click", function () {
-  let is_premium = username === "Mary";
   let author = $("input[name=author]").val();
   let title = $("input[name=title]").val();
   let content = $("textarea[name=content]").val();
-  let content_db = is_premium
-    ? content.replace(/\n/g, "<br/>")
-    : tagToPlainText(content).replace(/\n/g, "<br/>").replace(/ /g, "&nbsp;");
-  let content_js = tagToPlainText(content);
   if (author == "" || title == "" || content == "") {
     alert("欄位請勿空白");
     return false;
   }
   $("input[name=author], input[name=title], textarea[name=content]").val("");
+
+  let is_premium = username === "Mary";
+  let content_db = is_premium
+    ? content.replace(/\n/g, "<br/>")
+    : tagToPlainText(content).replace(/\n/g, "<br/>").replace(/ /g, "&nbsp;");
+  let content_js = tagToPlainText(content);
+
   $(".grid-container").append(
     `
   <div class="grid-item">` +
