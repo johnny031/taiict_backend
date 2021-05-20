@@ -12,4 +12,3 @@ MarkupSafe==1.1.0
 SQLAlchemy==1.4.15
 Werkzeug==0.14.1
 wincertstore==0.2
-mysql-connector==2.2.9
