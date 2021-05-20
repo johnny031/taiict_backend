@@ -112,4 +112,5 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == 'main':
+    db.create_all()
     app.run()
