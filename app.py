@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, func
 from datetime import datetime, timezone, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
+import dj_database_url
 import json
 
 app = Flask(__name__)
@@ -12,7 +13,12 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "Thisismysecretkeyandsupposenottobeknownfromothers"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy"
-
+DATABASES = {
+    'default': 'mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy'
+}
+DATABASES['default'] = dj_database_url.config(
+    default='mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy',
+)
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
@@ -31,7 +37,7 @@ class News(db.Model):
     datetime = db.Column(db.String(50), nullable=False)
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.String(3000), nullable=False)
-db.create_all()
+
 # User.__table__.drop(engine)
 # new_news = News(author="author", title="title", content="content")
 # db.session.add(new_news)
