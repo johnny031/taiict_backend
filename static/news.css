@@ -1,5 +1,6 @@
 .grid-container {
   display: inline-grid;
+  width: 100%;
   grid-template-columns: 0.25fr 0.5fr 1.2fr 3.8fr 0.25fr;
   grid-auto-rows: minmax(1.6em, auto);
 }
@@ -17,13 +18,14 @@
   word-break: break-all;
   text-align: start;
 }
+.btn-grid {
+  padding: 0;
+}
 .type {
+  padding: 0.2em;
   font-weight: bold;
   color: rgb(252, 252, 252);
   background-color: rgb(153, 153, 153);
-}
-.btn-grid {
-  padding: 0;
 }
 .delete-btn {
   font-weight: bolder;
@@ -49,6 +51,7 @@ input,
 input::placeholder,
 textarea::placeholder {
   padding-left: 0.2em;
+  font-family: "Microsoft JhengHei";
 }
 .add-news-btn {
   font-weight: bold;

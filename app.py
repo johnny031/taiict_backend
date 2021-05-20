@@ -28,6 +28,11 @@ def load_user(name):
     user = User(name=name, password="")
     return user
 
+def get_data(cursor):
+    list = []
+    for x in cursor:
+        list.append(x)
+    return list  
 # db = mysql.connector.connect(
 #     host = "remotemysql.com",
 #     user = "hYVZeathwy",
@@ -40,8 +45,8 @@ def load_user(name):
 # cursor.execute("CREATE TABLE User (userID int PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, password VARCHAR(80) NOT NULL)")
 # cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", ("John", datetime.now(), "First news title", "First news content"))
 # hashed = generate_password_hash("secrettaiict", method="sha256")
-# cursor.execute("INSERT INTO User (name, password) VALUES (%s, %s)", ("Mary", hashed))
-# db.commit()
+# cursor.execute("INSERT INTO User (name, password) VALUES (%s, %s)", ("John", "test"))
+# db.commit() 
 # cursor.execute("SELECT * FROM User")
 # list = []
 # for x in cursor:
@@ -49,7 +54,6 @@ def load_user(name):
 # print(list)
 # cursor.close()
 # db.close()
-
 @app.before_request
 def make_session_permanent():
     session.permanent = True
@@ -69,9 +73,7 @@ def login():
             )
             cursor = db.cursor()
             cursor.execute(f"SELECT password FROM User WHERE BINARY name = '{name}'")
-            list = []
-            for x in cursor:
-                list.append(x)
+            list = get_data(cursor)
             cursor.close()
             db.close()
             if len(list)>0 and check_password_hash(list[0][0], password):
@@ -83,7 +85,7 @@ def login():
                 return redirect(url_for('login'))
     return render_template("index.html")
 
-@app.route('/news-list', methods=["GET", "POST"])
+@app.route('/news-list', methods=["GET"])
 @login_required
 def news_list():
     db = mysql.connector.connect(
@@ -93,22 +95,42 @@ def news_list():
         database = "hYVZeathwy"
     )
     cursor = db.cursor()
-    if request.method == "POST":
-        author = request.form.get("author")
-        title = request.form.get("title")
-        content = request.form.get("content")
-        if len(author) > 0 and len(title) > 0 and len(content) > 0:
-            tz = timezone(timedelta(hours=+8))
-            datetime_str = datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
-            cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", (author, datetime_str, title, content))
-            db.commit()
     cursor.execute("SELECT * FROM News")
-    list = []
-    for x in cursor:
-        list.append(x)
+    list = get_data(cursor)
     cursor.close()
     db.close()
     return render_template("news.html", list=list, username=current_user.name)
+
+@app.route('/add-news', methods=["POST", "GET"])
+@login_required
+def add_news():
+    db = mysql.connector.connect(
+        host = "remotemysql.com",
+        user = "hYVZeathwy",
+        passwd = "8XlyxUFPDf",
+        database = "hYVZeathwy"
+    )
+    cursor = db.cursor()
+    if request.method == "POST":
+        data = json.loads(request.data)
+        author = data["author"]
+        title = data["title"]
+        content = data["content"]
+        tz = timezone(timedelta(hours=+8))
+        datetime_str = datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
+        session["datetime_str"] = datetime_str
+        cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", (author, datetime_str, title, content))
+        db.commit()
+        cursor.close()
+        db.close()
+        return jsonify({})  
+    else:
+        cursor.execute(f"SELECT newsId, datetime FROM News WHERE datetime = '{session['datetime_str']}'")
+        list = get_data(cursor)
+        cursor.close()
+        db.close()
+        session.pop('datetime_str')
+        return jsonify(list)
 
 @app.route('/json-data', methods=["GET","POST"])
 @cross_origin()
@@ -130,9 +152,7 @@ def delete_note():
         return jsonify({})
     else:
         cursor.execute("SELECT * FROM News")
-        list = []
-        for x in cursor:
-            list.append(x)
+        list = get_data(cursor)
         cursor.close()
         db.close()
         return jsonify(list)
