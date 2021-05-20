@@ -23,6 +23,9 @@ $(".add-news-btn").on("click", function () {
   if (author == "" || title == "" || content == "") {
     alert("欄位請勿空白");
     return false;
+  } else if (author.length > 50 || title.length > 80 || content.length > 3000) {
+    alert("字數過多");
+    return false;
   }
   $("input[name=author], input[name=title], textarea[name=content]").val("");
 
@@ -63,8 +66,8 @@ $(".add-news-btn").on("click", function () {
       method: "GET",
       url: "/add-news",
       success: function (data) {
-        $("#temp_id").attr("id", data[0][0]);
-        $("#temp_datetime").html(data[0][1]);
+        $("#temp_id").attr("id", data[0]);
+        $("#temp_datetime").html(data[1]);
         $("#temp_datetime").removeAttr("id");
       },
     });

@@ -15,16 +15,16 @@
   <div class="type grid-item">標題</div>
   <div class="type grid-item">內容</div>
   <div class="type grid-item btn-grid">刪除</div>
-  {% for item in list %}
-  <div class="grid-item">{{ item[1] }}</div>
-  <div class="grid-item">{{ item[2] }}</div>
-  <div class="grid-item">{{ item[3] }}</div>
+  {% for item in news %}
+  <div class="grid-item">{{ item.author }}</div>
+  <div class="grid-item">{{ item.datetime }}</div>
+  <div class="grid-item">{{ item.title }}</div>
   <div class="grid-item news-content">
-    {{ item[4] | replace("&lt;", "<") | replace("&gt;", ">") |
+    {{ item.content | replace("&lt;", "<") | replace("&gt;", ">") |
     replace("&nbsp;"," ") | replace("<"+"br/>", " ") }}
   </div>
   <div class="grid-item btn-grid">
-    <button class="delete-btn" id="{{ item[0] }}">
+    <button class="delete-btn" id="{{ item.newsId }}">
       <span>&times;</span>
     </button>
   </div>

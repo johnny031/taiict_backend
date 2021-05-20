@@ -1,7 +1,8 @@
-import mysql.connector
 from flask import Flask, request, render_template, jsonify, url_for, redirect, flash, session
 from flask_cors import cross_origin
 from flask_login import LoginManager, UserMixin, login_user, current_user, login_required, logout_user
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, func
 from datetime import datetime, timezone, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
@@ -9,51 +10,41 @@ import json
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "Thisismysecretkeyandsupposenottobeknownfromothers"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy"
+engine = create_engine('mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy')
+
+db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 login_manager.login_message = "您沒有權限，請先登入"
-class User(UserMixin):
-    def __init__(self, name, password):
-        self.name = name
-        self.password = password
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    premium = db.Column(db.Boolean(), nullable=False)
 
-    @property
-    def id(self):
-        return self.name
+class News(db.Model):
+    newsId = db.Column(db.Integer, primary_key = True)
+    author = db.Column(db.String(50), nullable=False)
+    datetime = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(80), nullable=False)
+    content = db.Column(db.String(3000), nullable=False)
+
+# User.__table__.drop(engine)
+# new_news = News(author="author", title="title", content="content")
+# db.session.add(new_news)
+# db.session.commit()
+# news = News.query.all()
+# print(news)
 
 @login_manager.user_loader
-def load_user(name):
-    user = User(name=name, password="")
+def load_user(id):
+    user = User.query.get(id)
     return user
 
-def get_data(cursor):
-    list = []
-    for x in cursor:
-        list.append(x)
-    return list  
-# db = mysql.connector.connect(
-#     host = "remotemysql.com",
-#     user = "hYVZeathwy",
-#     passwd = "8XlyxUFPDf",
-#     database = "hYVZeathwy"
-# )
-# cursor = db.cursor()
-# cursor.execute("DELETE FROM User")
-# cursor.execute("CREATE TABLE News (newsID int PRIMARY KEY AUTO_INCREMENT, author VARCHAR(50) NOT NULL, datetime VARCHAR(50) NOT NULL, title VARCHAR(80) NOT NULL, content VARCHAR(3000) NOT NULL)")
-# cursor.execute("CREATE TABLE User (userID int PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50) NOT NULL, password VARCHAR(80) NOT NULL)")
-# cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", ("John", datetime.now(), "First news title", "First news content"))
-# hashed = generate_password_hash("secrettaiict", method="sha256")
-# cursor.execute("INSERT INTO User (name, password) VALUES (%s, %s)", ("John", "test"))
-# db.commit() 
-# cursor.execute("SELECT * FROM User")
-# list = []
-# for x in cursor:
-#     list.append(x)
-# print(list)
-# cursor.close()
-# db.close()
 @app.before_request
 def make_session_permanent():
     session.permanent = True
@@ -65,19 +56,8 @@ def login():
         name = request.form.get('name')
         password = request.form.get('password')
         if len(name)>0 and len(password)>0:
-            db = mysql.connector.connect(
-                host = "remotemysql.com",
-                user = "hYVZeathwy",
-                passwd = "8XlyxUFPDf",
-                database = "hYVZeathwy"
-            )
-            cursor = db.cursor()
-            cursor.execute(f"SELECT password FROM User WHERE BINARY name = '{name}'")
-            list = get_data(cursor)
-            cursor.close()
-            db.close()
-            if len(list)>0 and check_password_hash(list[0][0], password):
-                user = User(name=name, password=password)
+            user = User.query.filter_by(name=func.binary(name)).first()
+            if user and check_password_hash(user.password, password):
                 login_user(user)
                 return redirect(url_for('news_list'))
             else:
@@ -88,29 +68,12 @@ def login():
 @app.route('/news-list', methods=["GET"])
 @login_required
 def news_list():
-    db = mysql.connector.connect(
-        host = "remotemysql.com",
-        user = "hYVZeathwy",
-        passwd = "8XlyxUFPDf",
-        database = "hYVZeathwy"
-    )
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM News")
-    list = get_data(cursor)
-    cursor.close()
-    db.close()
-    return render_template("news.html", list=list, username=current_user.name)
+    news = News.query.all()
+    return render_template("news.html", news=news, username=current_user.name)
 
 @app.route('/add-news', methods=["POST", "GET"])
 @login_required
 def add_news():
-    db = mysql.connector.connect(
-        host = "remotemysql.com",
-        user = "hYVZeathwy",
-        passwd = "8XlyxUFPDf",
-        database = "hYVZeathwy"
-    )
-    cursor = db.cursor()
     if request.method == "POST":
         data = json.loads(request.data)
         author = data["author"]
@@ -119,42 +82,27 @@ def add_news():
         tz = timezone(timedelta(hours=+8))
         datetime_str = datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
         session["datetime_str"] = datetime_str
-        cursor.execute("INSERT INTO News (author, datetime, title, content) VALUES (%s, %s, %s, %s)", (author, datetime_str, title, content))
-        db.commit()
-        cursor.close()
-        db.close()
+        new_news = News(author=author, datetime=datetime_str, title=title, content=content)
+        db.session.add(new_news)
+        db.session.commit()
         return jsonify({})  
     else:
-        cursor.execute(f"SELECT newsId, datetime FROM News WHERE datetime = '{session['datetime_str']}'")
-        list = get_data(cursor)
-        cursor.close()
-        db.close()
-        session.pop('datetime_str')
-        return jsonify(list)
+        news_added = News.query.filter_by(datetime=session["datetime_str"]).first()
+        session.pop("datetime_str")
+        return jsonify(news_added.newsId, news_added.datetime)
 
 @app.route('/json-data', methods=["GET","POST"])
 @cross_origin()
 def delete_note():
-    db = mysql.connector.connect(
-        host = "remotemysql.com",
-        user = "hYVZeathwy",
-        passwd = "8XlyxUFPDf",
-        database = "hYVZeathwy"
-    )
-    cursor = db.cursor()
     if request.method == "POST":
         news = json.loads(request.data)
         newsId = news["newsId"]
-        cursor.execute(f"DELETE FROM News WHERE newsId = {newsId}")
-        db.commit()
-        cursor.close()
-        db.close()
+        News.query.filter(News.newsId == newsId).delete()
+        db.session.commit()
         return jsonify({})
     else:
-        cursor.execute("SELECT * FROM News")
-        list = get_data(cursor)
-        cursor.close()
-        db.close()
+        news = News.query.all()
+        list = [[i.newsId, i.author, i.datetime, i.title, i.content] for i in news]
         return jsonify(list)
 
 @app.route('/logout')
