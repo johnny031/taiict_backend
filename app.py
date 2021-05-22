@@ -63,11 +63,11 @@ class Img(db.Model):
 # News.query.filter(News.newsId == 249).delete()
 # db.session.commit()
 
-# news_del = News.query.filter_by(newsId=264).first()
+# news_del = News.query.filter_by(newsId=268).first()
 # db.session.delete(news_del)
 # db.session.commit()
 
-# news = News.query.all()
+# news = Img.query.all()
 # print(news)
 
 @login_manager.user_loader
