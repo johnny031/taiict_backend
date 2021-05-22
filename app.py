@@ -11,13 +11,13 @@ import json
 import os
 
 UPLOAD_FOLDER = 'static/uploads/'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'doc', 'xlsx', 'pptx', 'ppt'])
 
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "Thisismysecretkeyandsupposenottobeknownfromothers"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024 # 1 MB
+app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 # 500KB
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy"
@@ -126,7 +126,7 @@ def add_news():
                 return jsonify({})
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                if len(filename) < 5:
+                if len(filename) < 4:
                     filename = "." + filename
                 file_obj = File(name=filename, news=new_news)
                 db.session.add(file_obj)

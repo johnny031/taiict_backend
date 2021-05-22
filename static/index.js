@@ -107,13 +107,17 @@ function tagToPlainText(code) {
 }
 //change label text when image selected
 $("#FileUpload").on("change", function () {
+  let fileExtension = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'doc', 'xlsx', 'pptx', 'ppt'];
   let file_size = 0;
   for (let i = 0; i < this.files.length; i++) {
     file_size += this.files[i].size
   }
-  if (file_size > 500 * 1024) {
-    // 500KB
+  if (file_size > 500 * 1024) { // 500KB
     alert("附件已超出容量限制500KB")
+    $(this).val("");
+    $(this).next().text("附件");
+  } else if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+    alert("不支援的檔案格式，只支援：" + fileExtension.join(', '));
     $(this).val("");
     $(this).next().text("附件");
   }
