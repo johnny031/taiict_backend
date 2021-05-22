@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "Thisismysecretkeyandsupposenottobeknownfromothers"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024 # 1 MB
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy"
@@ -47,14 +47,13 @@ class News(db.Model):
     datetime = db.Column(db.String(50), nullable=False)
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.String(3000), nullable=False)
-    img = db.relationship("Img", cascade="all,delete", backref="news")
+    files = db.relationship("File", cascade="all,delete", backref="news")
 
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-class Img(db.Model):
+class File(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50), nullable=False)
-    width = db.Column(db.String(5), nullable=False)
     news_Id = db.Column(db.Integer, db.ForeignKey("news.newsId"), nullable=False)
 
 # News.__table__.drop(db.engine)
@@ -69,6 +68,7 @@ class Img(db.Model):
 
 # news = News.query.all()
 # print(news)
+
 
 @login_manager.user_loader
 def load_user(id):
@@ -108,8 +108,7 @@ def add_news():
         author = request.form["author"]
         title = request.form["title"]
         content = request.form["content"]
-        img_width = request.form["img_width"]
-
+        
         tz = timezone(timedelta(hours=+8))
         datetime_str = datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
         session["datetime_str"] = datetime_str
@@ -119,37 +118,38 @@ def add_news():
 
         if 'file' not in request.files:
             return jsonify({}) 
-        file = request.files["file"]
-        if file.filename == '':
-            return jsonify({})
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            if len(filename) < 5:
-                filename = "." + filename
-            img = Img(name=filename, width=img_width, news=new_news)
-            db.session.add(img)
-            db.session.commit()
-            new_img = db.session.query(Img).order_by(Img.id.desc()).first()
-            _id = str(new_img.id)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], _id + "_" + filename))
+        files = request.files.getlist("file")
+        print(files)
+        
+        for file in files:
+            if file.filename == '':
+                return jsonify({})
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                if len(filename) < 5:
+                    filename = "." + filename
+                file_obj = File(name=filename, news=new_news)
+                db.session.add(file_obj)
+                db.session.commit()
+                new_file = db.session.query(File).order_by(File.id.desc()).first()
+                _id = str(new_file.id)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], _id + "_" + filename))
         return jsonify({})  
     else:
         news_added = News.query.filter_by(datetime=session["datetime_str"]).first()
         session.pop("datetime_str")
-        has_img = news_added.img[0].name if len(news_added.img) > 0 else "無"
-        return jsonify(news_added.newsId, news_added.datetime, has_img)
+        return jsonify(news_added.newsId, news_added.datetime)
 
 @app.route('/json-data', methods=["GET","POST"])
 @cross_origin()
 def delete_note():
     if request.method == "POST":
         news = json.loads(request.data)
-        newsId = news["newsId"]
-        
-        img_del = Img.query.filter_by(news_Id=newsId).first() 
-
-        if img_del is not None:
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], str(img_del.id) + "_" + img_del.name))
+        newsId = news["newsId"]   
+        files_del = File.query.filter_by(news_Id=newsId).all()
+        for file_del in files_del:
+            if file_del is not None:
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], str(file_del.id) + "_" + file_del.name))
 
         news_del = News.query.filter_by(newsId=newsId).first()
         db.session.delete(news_del)
@@ -158,9 +158,7 @@ def delete_note():
     else:
         news = News.query.all()
         list = [[i.newsId, i.author, i.datetime, i.title, i.content, 
-        i.img[0].id if len(i.img) > 0 else "", 
-        i.img[0].name if len(i.img) > 0 else "", 
-        i.img[0].width if len(i.img) > 0 else ""] for i in news]
+        [[j.id, j.name] for j in i.files]] for i in news]
         return jsonify(list)
 
 @app.route('/logout')

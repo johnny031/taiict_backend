@@ -14,7 +14,7 @@
   <div class="type grid-item">時間</div>
   <div class="type grid-item">標題</div>
   <div class="type grid-item">內容</div>
-  <div class="type grid-item">照片</div>
+  <div class="type grid-item">檔案</div>
   <div class="type grid-item btn-grid">刪除</div>
   {% for item in news %}
   <div class="grid-item">{{ item.author }}</div>
@@ -24,9 +24,7 @@
     {{ item.content | replace("&lt;", "<") | replace("&gt;", ">") |
     replace("&nbsp;"," ") | replace("<"+"br/>", " ") }}
   </div>
-  <div class="grid-item">
-    {% if item.img|length > 0 %}{{ item.img[0].name }}{% else %}無{% endif%}
-  </div>
+  <div class="grid-item">{{ item.files|length }}</div>
   <div class="grid-item btn-grid">
     <button class="delete-btn" id="{{ item.newsId }}">
       <span>&times;</span>
@@ -52,23 +50,8 @@
       placeholder="內容 {% if username == 'Mary' %}( 允許使用html tag ){% endif %}"
     ></textarea>
     <div class="flexbox-container">
-      <input
-        id="FileUpload"
-        type="file"
-        accept="image/png, image/gif, image/jpeg"
-      />
-      <label for="FileUpload">照片</label>
-      <div class="img-width-div" style="display: none">
-        寬度：
-        <input
-          id="img-width"
-          type="number"
-          min="1"
-          max="100"
-          name="img-width"
-        />
-        %
-      </div>
+      <input id="FileUpload" type="file" multiple />
+      <label for="FileUpload">附件</label>
     </div>
     <button class="add-news-btn" type="submit">新增</button>
   </div>

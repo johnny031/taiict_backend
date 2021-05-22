@@ -20,28 +20,25 @@ $(".add-news-btn").on("click", function () {
   let author = $("input[name=author]").val();
   let title = $("input[name=title]").val();
   let content = $("textarea[name=content]").val();
-  let fileObj = document.getElementById("FileUpload").files[0];
-  let img_width = $("input[name='img-width']").val();
+  let fileObj = document.getElementById("FileUpload").files;
+
   if (author == "" || title == "" || content == "") {
     alert("欄位請勿空白");
     return false;
   } else if (author.length > 50 || title.length > 80 || content.length > 3000) {
     alert("字數過多");
     return false;
-  } else if (typeof fileObj !== "undefined" && (img_width == "" || parseInt(img_width) < 1 || parseInt(img_width) > 100)) {
-    alert("請輸入照片之寬度百分比，範圍為1至100")
-    return false;
   }
-  $("input[name=author], input[name=title], textarea[name=content], input[type='file'], input[name='img-width']").val("");
-  $("#FileUpload + label").html("照片")
-  $(".img-width-div").css("display", "none");
-  let img_field = typeof fileObj === "undefined" ? "無" : "---";
 
+  let file_field = fileObj.length;
   let news_data = new FormData();
-  news_data.append("file", fileObj);
+  for (let i = 0; i < fileObj.length; i++) {
+    news_data.append("file", fileObj[i]);
+  }
   news_data.append("author", author);
   news_data.append("title", title);
-  news_data.append("img_width", img_width);
+  $("input[name=author], input[name=title], textarea[name=content], input[type='file']").val("");
+  $("#FileUpload + label").html("附件")
 
   let is_premium = username === "Mary";
   let content_db = is_premium
@@ -62,7 +59,7 @@ $(".add-news-btn").on("click", function () {
   <div class="grid-item news-content">` +
     content_js +
     `</div>
-  <div class="grid-item" id="temp_img">`+ img_field + `</div>
+  <div class="grid-item">`+ file_field + `</div>
   <div class="grid-item btn-grid">
     <button class="delete-btn" id="temp_id">
       <span>&times;</span>
@@ -86,8 +83,6 @@ $(".add-news-btn").on("click", function () {
         $("#temp_id").attr("id", data[0]);
         $("#temp_datetime").html(data[1]);
         $("#temp_datetime").removeAttr("id");
-        $("#temp_img").html(data[2]);
-        $("#temp_img").removeAttr("id");
       },
     });
   });
@@ -112,9 +107,17 @@ function tagToPlainText(code) {
 }
 //change label text when image selected
 $("#FileUpload").on("change", function () {
-  let file = this.files[0].name;
+  let file_size = 0;
+  for (let i = 0; i < this.files.length; i++) {
+    file_size += this.files[i].size
+  }
+  if (file_size > 500 * 1024) {
+    // 500KB
+    alert("附件已超出容量限制500KB")
+    $(this).val("");
+    $(this).next().text("附件");
+  }
   if ($(this).val() != "") {
-    $(this).next().text(file);
-    $(".img-width-div").css("display", "block");
+    $(this).next().text(this.files.length + "個檔案");
   }
 });

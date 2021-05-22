@@ -129,22 +129,6 @@ h2 {
 #FileUpload + label:hover {
   background-color: rgb(255, 255, 255);
 }
-.img-width-div {
-  margin-left: 10px;
-  align-self: center;
-}
-#img-width {
-  width: 2.5rem;
-  height: 1.2rem;
-  font-size: 1rem;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-  background-color: rgb(245, 245, 245);
-  border: none;
-  outline: none;
-  border-bottom: 1px solid gray;
-}
 @media only screen and (min-width: 525px) {
   .add-news-card {
     width: 70%;
