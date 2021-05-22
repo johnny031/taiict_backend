@@ -54,16 +54,22 @@ def allowed_file(filename):
 class Img(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50), nullable=False)
+    width = db.Column(db.String(5), nullable=False)
     news_Id = db.Column(db.Integer, db.ForeignKey("news.newsId"), nullable=False)
 
 # Img.__table__.drop(db.engine)
 # new_news = News(author="author", title="title", content="content")
 # db.session.add(new_news)
-# Img.query.filter(Img.id == 1).delete()
+# News.query.filter(News.newsId == 249).delete()
 # db.session.commit()
-# news = News.query.all()
+
+# news_del = News.query.filter_by(newsId=249).first()
+# db.session.delete(news_del)
+# db.session.commit()
+
+# news = Img.query.all()
 # print(news)
- 
+
 @login_manager.user_loader
 def load_user(id):
     user = User.query.get(id)
@@ -102,7 +108,8 @@ def add_news():
         author = request.form["author"]
         title = request.form["title"]
         content = request.form["content"]
-    
+        img_width = request.form["img_width"]
+
         tz = timezone(timedelta(hours=+8))
         datetime_str = datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
         session["datetime_str"] = datetime_str
@@ -119,7 +126,7 @@ def add_news():
             filename = secure_filename(file.filename)
             if len(filename) < 5:
                 filename = "." + filename
-            img = Img(name=filename, news=new_news)
+            img = Img(name=filename, width=img_width, news=new_news)
             db.session.add(img)
             db.session.commit()
             new_img = db.session.query(Img).order_by(Img.id.desc()).first()
@@ -150,7 +157,10 @@ def delete_note():
         return jsonify({})
     else:
         news = News.query.all()
-        list = [[i.newsId, i.author, i.datetime, i.title, i.content, i.img[0].id, i.img[0].name] for i in news]
+        list = [[i.newsId, i.author, i.datetime, i.title, i.content, 
+        i.img[0].id if len(i.img) > 0 else "", 
+        i.img[0].name if len(i.img) > 0 else "", 
+        i.img[0].width if len(i.img) > 0 else ""] for i in news]
         return jsonify(list)
 
 @app.route('/logout')

@@ -51,12 +51,25 @@
       rows="10"
       placeholder="內容 {% if username == 'Mary' %}( 允許使用html tag ){% endif %}"
     ></textarea>
-    <input
-      id="FileUpload"
-      type="file"
-      accept="image/png, image/gif, image/jpeg"
-    />
-    <label for="FileUpload">照片</label>
+    <div class="flexbox-container">
+      <input
+        id="FileUpload"
+        type="file"
+        accept="image/png, image/gif, image/jpeg"
+      />
+      <label for="FileUpload">照片</label>
+      <div class="img-width-div" style="display: none">
+        寬度：
+        <input
+          id="img-width"
+          type="number"
+          min="1"
+          max="100"
+          name="img-width"
+        />
+        %
+      </div>
+    </div>
     <button class="add-news-btn" type="submit">新增</button>
   </div>
 </form>

@@ -110,13 +110,14 @@ h2 {
 .logout-link:hover {
   color: rgb(102, 102, 206);
 }
+.flexbox-container {
+  display: flex;
+}
 #FileUpload {
   width: 0;
   position: absolute;
 }
 #FileUpload + label {
-  display: inline-block;
-  position: relative;
   padding: 0.3em 0.7em;
   margin: 0.2em 0;
   border: 1px solid rgb(117, 117, 117);
@@ -127,6 +128,22 @@ h2 {
 }
 #FileUpload + label:hover {
   background-color: rgb(255, 255, 255);
+}
+.img-width-div {
+  margin-left: 10px;
+  align-self: center;
+}
+#img-width {
+  width: 2.5rem;
+  height: 1.2rem;
+  font-size: 1rem;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  background-color: rgb(245, 245, 245);
+  border: none;
+  outline: none;
+  border-bottom: 1px solid gray;
 }
 @media only screen and (min-width: 525px) {
   .add-news-card {
