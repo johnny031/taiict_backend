@@ -14,6 +14,7 @@
   <div class="type grid-item">時間</div>
   <div class="type grid-item">標題</div>
   <div class="type grid-item">內容</div>
+  <div class="type grid-item">照片</div>
   <div class="type grid-item btn-grid">刪除</div>
   {% for item in news %}
   <div class="grid-item">{{ item.author }}</div>
@@ -23,6 +24,9 @@
     {{ item.content | replace("&lt;", "<") | replace("&gt;", ">") |
     replace("&nbsp;"," ") | replace("<"+"br/>", " ") }}
   </div>
+  <div class="grid-item">
+    {% if item.img|length > 0 %}{{ item.img[0].name }}{% else %}無{% endif%}
+  </div>
   <div class="grid-item btn-grid">
     <button class="delete-btn" id="{{ item.newsId }}">
       <span>&times;</span>
@@ -30,18 +34,30 @@
   </div>
   {% endfor %}
 </div>
-<form name="add-news-form" action="javascript:void(0);">
+<form
+  name="add-news-form"
+  action="javascript:void(0);"
+  enctype="multipart/form-data"
+>
   <h2>新增最新消息</h2>
-  <h4>類別</h4>
-  <input name="author" type="text" placeholder="類別" />
-  <h4>標題</h4>
-  <input name="title" type="text" placeholder="標題" />
-  <h4>內容</h4>
-  <textarea
-    name="content"
-    rows="10"
-    placeholder="內容 {% if username == 'Mary' %}( 允許使用html tag ){% endif %}"
-  ></textarea>
-  <button class="add-news-btn" type="submit">新增</button>
+  <div class="add-news-card">
+    <h4>類別</h4>
+    <input name="author" type="text" placeholder="類別" />
+    <h4>標題</h4>
+    <input name="title" type="text" placeholder="標題" />
+    <h4>內容</h4>
+    <textarea
+      name="content"
+      rows="10"
+      placeholder="內容 {% if username == 'Mary' %}( 允許使用html tag ){% endif %}"
+    ></textarea>
+    <input
+      id="FileUpload"
+      type="file"
+      accept="image/png, image/gif, image/jpeg"
+    />
+    <label for="FileUpload">照片</label>
+    <button class="add-news-btn" type="submit">新增</button>
+  </div>
 </form>
 {% endblock %}

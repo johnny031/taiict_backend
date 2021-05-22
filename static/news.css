@@ -1,7 +1,7 @@
 .grid-container {
   display: inline-grid;
   width: 100%;
-  grid-template-columns: 0.25fr 0.5fr 1.2fr 3.8fr 0.25fr;
+  grid-template-columns: 0.25fr 0.5fr 1.2fr 3.8fr 0.25fr 0.25fr;
   grid-auto-rows: minmax(1.6em, auto);
 }
 .grid-container,
@@ -15,8 +15,8 @@
   padding: 0.2em;
 }
 .news-content {
-  word-break: break-all;
   text-align: start;
+  word-break: break-all;
 }
 .btn-grid {
   padding: 0;
@@ -39,10 +39,19 @@
   background-color: rgb(255, 238, 238);
 }
 input,
+textarea {
+  padding: 0;
+  margin: 0;
+}
+input,
 .add-news-btn,
 textarea {
   box-sizing: border-box;
   width: 100%;
+}
+.add-news-card {
+  width: 100%;
+  margin: 0 auto;
 }
 input,
 .add-news-btn {
@@ -101,13 +110,33 @@ h2 {
 .logout-link:hover {
   color: rgb(102, 102, 206);
 }
+#FileUpload {
+  width: 0;
+  position: absolute;
+}
+#FileUpload + label {
+  display: inline-block;
+  position: relative;
+  padding: 0.3em 0.7em;
+  margin: 0.2em 0;
+  border: 1px solid rgb(117, 117, 117);
+  border-radius: 3px;
+  color: rgb(22, 22, 22);
+  background-color: rgb(211, 211, 211);
+  cursor: pointer;
+}
+#FileUpload + label:hover {
+  background-color: rgb(255, 255, 255);
+}
 @media only screen and (min-width: 525px) {
-  input,
-  .add-news-btn,
-  textarea {
+  .add-news-card {
     width: 70%;
+    margin: 0 auto;
   }
   form {
     text-align: center;
+  }
+  #FileUpload + label {
+    text-align: left;
   }
 }
