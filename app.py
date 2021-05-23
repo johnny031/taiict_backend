@@ -59,10 +59,10 @@ class File(db.Model):
 # News.__table__.drop(db.engine)
 # new_news = News(author="author", title="title", content="content")
 # db.session.add(new_news)
-# News.query.filter(News.newsId == 249).delete()
+# News.query.filter(News.newsId == 302).update({"author":"UPDATED", "title":"TITLE"})
 # db.session.commit()
 
-# news_del = News.query.filter_by(newsId=274).first()
+# news_del = News.query.filter_by(newsId=364).first()
 # db.session.delete(news_del)
 # db.session.commit()
 
@@ -108,34 +108,52 @@ def add_news():
         author = request.form["author"]
         title = request.form["title"]
         content = request.form["content"]
+        edit = request.form["edit"]
         
         tz = timezone(timedelta(hours=+8))
         datetime_str = datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
         session["datetime_str"] = datetime_str
-        new_news = News(author=author, datetime=datetime_str, title=title, content=content)
-        db.session.add(new_news)
+        
+        if not len(edit) > 0:
+            # add news
+            new_news = News(author=author, datetime=datetime_str, title=title, content=content)
+            db.session.add(new_news)  
+        else:
+            # edit news
+            News.query.filter(News.newsId == edit).update({"author":author, "datetime":datetime_str, "title":title, "content":content})
         db.session.commit()
 
         if 'file' not in request.files:
             return jsonify({}) 
         files = request.files.getlist("file")
-        print(files)
-        
+        if len(edit) > 0:
+            # delete old file
+            files_del = File.query.filter_by(news_Id=edit).all()
+            for file_del in files_del:
+                if file_del is not None:
+                    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], str(file_del.id) + "_" + file_del.name))            
+                db.session.delete(file_del)
+                db.session.commit()
         for file in files:
             if file.filename == '':
-                return jsonify({})
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                if len(filename) < 4:
-                    filename = "." + filename
+                continue
+            if not file or not allowed_file(file.filename):
+                continue
+            filename = secure_filename(file.filename)
+            if len(filename) < 4:
+                filename = "." + filename
+            # add news file
+            if len(edit) > 0:
+                file_obj = File(name=filename, news_Id=edit)
+            else:
                 file_obj = File(name=filename, news=new_news)
-                db.session.add(file_obj)
-                db.session.commit()
-                new_file = db.session.query(File).order_by(File.id.desc()).first()
-                _id = str(new_file.id)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], _id + "_" + filename))
+            db.session.add(file_obj)
+            db.session.commit()
+            new_file = db.session.query(File).order_by(File.id.desc()).first()
+            _id = str(new_file.id)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], _id + "_" + filename))
         return jsonify({})  
-    else:
+    else:  
         news_added = News.query.filter_by(datetime=session["datetime_str"]).first()
         session.pop("datetime_str")
         return jsonify(news_added.newsId, news_added.datetime)

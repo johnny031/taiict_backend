@@ -9,35 +9,45 @@
     >
   </div>
 </div>
-<div class="grid-container">
-  <div class="type grid-item">類別</div>
-  <div class="type grid-item">時間</div>
-  <div class="type grid-item">標題</div>
-  <div class="type grid-item">內容</div>
-  <div class="type grid-item">檔案</div>
-  <div class="type grid-item btn-grid">刪除</div>
-  {% for item in news %}
-  <div class="grid-item">{{ item.author }}</div>
-  <div class="grid-item">{{ item.datetime }}</div>
-  <div class="grid-item">{{ item.title }}</div>
-  <div class="grid-item news-content">
-    {{ item.content | replace("&lt;", "<") | replace("&gt;", ">") |
-    replace("&nbsp;"," ") | replace("<"+"br/>", " ") }}
+<div class="news-data-div">
+  <div class="grid-container">
+    <div class="type grid-item">類別</div>
+    <div class="type grid-item">時間</div>
+    <div class="type grid-item">標題</div>
+    <div class="type grid-item">內容</div>
+    <div class="type grid-item">附件</div>
+    <div class="type grid-item">編輯</div>
+    <div class="type grid-item btn-grid">刪除</div>
+    {% for item in news %}
+    <div class="grid-item">{{ item.author }}</div>
+    <div class="grid-item">{{ item.datetime }}</div>
+    <div class="grid-item">{{ item.title }}</div>
+    <div class="grid-item news-content">
+      {{ item.content | replace("&lt;", "<") | replace("&gt;", ">") |
+      replace("&nbsp;"," ") | replace("<"+"br/>", " ") }}
+    </div>
+    <div class="grid-item">{{ item.files|length }}</div>
+    <div class="grid-item edit-grid">
+      <button class="edit-btn" id="{{ item.newsId }}">
+        <span><i class="fas fa-pen"></i></span>
+      </button>
+    </div>
+    <div class="grid-item btn-grid">
+      <button class="delete-btn" id="{{ item.newsId }}">
+        <span><i class="fas fa-trash"></i></span>
+      </button>
+    </div>
+    {% endfor %}
   </div>
-  <div class="grid-item">{{ item.files|length }}</div>
-  <div class="grid-item btn-grid">
-    <button class="delete-btn" id="{{ item.newsId }}">
-      <span>&times;</span>
-    </button>
-  </div>
-  {% endfor %}
+  <button class="show-add-card">新增</button>
 </div>
 <form
   name="add-news-form"
   action="javascript:void(0);"
   enctype="multipart/form-data"
+  style="display: none"
 >
-  <h2>新增最新消息</h2>
+  <h2 class="add-news-title">新增最新消息</h2>
   <div class="add-news-card">
     <h4>類別</h4>
     <input name="author" type="text" placeholder="類別" />

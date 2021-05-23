@@ -1,7 +1,7 @@
 .grid-container {
   display: inline-grid;
   width: 100%;
-  grid-template-columns: 0.25fr 0.5fr 1.2fr 3.8fr 0.25fr 0.25fr;
+  grid-template-columns: 0.25fr 0.5fr 1.2fr 3.8fr 0.25fr 0.25fr 0.25fr;
   grid-auto-rows: minmax(1.6em, auto);
 }
 .grid-container,
@@ -18,7 +18,8 @@
   text-align: start;
   word-break: break-all;
 }
-.btn-grid {
+.btn-grid,
+.edit-grid {
   padding: 0;
 }
 .type {
@@ -27,7 +28,8 @@
   color: rgb(252, 252, 252);
   background-color: rgb(153, 153, 153);
 }
-.delete-btn {
+.delete-btn,
+.edit-btn {
   font-weight: bolder;
   border: none;
   width: 100%;
@@ -35,8 +37,13 @@
   background-color: rgb(231, 231, 231);
   cursor: pointer;
 }
+.edit-btn:hover {
+  background-color: rgb(215, 255, 210);
+  color: rgb(0, 128, 0);
+}
 .delete-btn:hover {
-  background-color: rgb(255, 238, 238);
+  background-color: rgb(255, 201, 199);
+  color: rgb(175, 11, 11);
 }
 input,
 textarea {
@@ -78,7 +85,7 @@ textarea::placeholder {
 }
 form {
   background-color: rgb(245, 245, 245);
-  margin: 3em 0;
+  margin: 0;
   padding: 1em 1em;
   border: 1px solid black;
 }
@@ -128,6 +135,10 @@ h2 {
 }
 #FileUpload + label:hover {
   background-color: rgb(255, 255, 255);
+}
+.show-add-card {
+  float: right;
+  margin: 0.7em 0;
 }
 @media only screen and (min-width: 525px) {
   .add-news-card {
