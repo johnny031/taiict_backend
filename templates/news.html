@@ -2,44 +2,46 @@
 <link href="{{ url_for('static', filename='news.css') }}" rel="stylesheet" />
 {% endblock %} {% block title %}變更最新消息{% endblock %} {% block content %}
 <div class="container">
-  <h1>最新消息</h1>
-  <div class="logout-div">
-    <a class="logout-link" href="{{ url_for('logout') }}"
-      >登出 ({{username}})</a
-    >
+  <div class="title-container">
+    <h1>最新消息</h1>
+    <div class="logout-div">
+      <a class="logout-link" href="{{ url_for('logout') }}"
+        >登出 ({{username}})</a
+      >
+    </div>
   </div>
-</div>
-<div class="news-data-div">
-  <div class="grid-container">
-    <div class="type grid-item">類別</div>
-    <div class="type grid-item">時間</div>
-    <div class="type grid-item">標題</div>
-    <div class="type grid-item">內容</div>
-    <div class="type grid-item">附件</div>
-    <div class="type grid-item">編輯</div>
-    <div class="type grid-item btn-grid">刪除</div>
-    {% for item in news %}
-    <div class="grid-item">{{ item.author }}</div>
-    <div class="grid-item">{{ item.datetime }}</div>
-    <div class="grid-item">{{ item.title }}</div>
-    <div class="grid-item news-content">
-      {{- item.content | replace("&lt;", "<") | replace("&gt;", ">") |
-      replace("&nbsp;", " ") | replace("<"+"br/>", "\n") -}}
+  <div class="news-data-div">
+    <div class="grid-container">
+      <div class="type grid-item">類別</div>
+      <div class="type grid-item">時間</div>
+      <div class="type grid-item">標題</div>
+      <div class="type grid-item">內容</div>
+      <div class="type grid-item">附件</div>
+      <div class="type grid-item">編輯</div>
+      <div class="type grid-item btn-grid">刪除</div>
+      {% for item in news %}
+      <div class="grid-item">{{ item.author }}</div>
+      <div class="grid-item">{{ item.datetime }}</div>
+      <div class="grid-item">{{ item.title }}</div>
+      <div class="grid-item news-content">
+        {{- item.content | replace("&lt;", "<") | replace("&gt;", ">") |
+        replace("&nbsp;", " ") | replace("<"+"br/>", "\n") -}}
+      </div>
+      <div class="grid-item">{{ item.files|length }}</div>
+      <div class="grid-item edit-grid">
+        <button class="edit-btn" id="{{ item.newsId }}">
+          <span><i class="fas fa-pen"></i></span>
+        </button>
+      </div>
+      <div class="grid-item btn-grid">
+        <button class="delete-btn" id="{{ item.newsId }}">
+          <span><i class="fas fa-trash"></i></span>
+        </button>
+      </div>
+      {% endfor %}
     </div>
-    <div class="grid-item">{{ item.files|length }}</div>
-    <div class="grid-item edit-grid">
-      <button class="edit-btn" id="{{ item.newsId }}">
-        <span><i class="fas fa-pen"></i></span>
-      </button>
-    </div>
-    <div class="grid-item btn-grid">
-      <button class="delete-btn" id="{{ item.newsId }}">
-        <span><i class="fas fa-trash"></i></span>
-      </button>
-    </div>
-    {% endfor %}
+    <button class="show-add-card">新增</button>
   </div>
-  <button class="show-add-card">新增</button>
 </div>
 <form
   name="add-news-form"

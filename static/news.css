@@ -1,18 +1,23 @@
+.title-container {
+  margin: 0 1.6em;
+}
 .grid-container {
-  display: inline-grid;
+  display: grid;
   width: 100%;
-  grid-template-columns: 0.25fr 0.5fr 1.2fr 3.8fr 0.25fr 0.25fr 0.25fr;
+  grid-template-columns: 0.6fr 0.6fr 1.5fr 3.5fr 0.5fr 0.5fr 0.5fr;
   grid-auto-rows: minmax(1.6em, auto);
 }
 .grid-container,
 .grid-item {
-  border: 0.1px solid rgb(88, 88, 88);
+  border: 0.1px solid rgb(219, 219, 219);
+  word-break: break-word;
 }
 .grid-item {
   font-size: 0.8rem;
   line-height: 1.6em;
   text-align: center;
   padding: 0.2em;
+  font-family: "Microsoft JhengHei";
 }
 .news-content {
   text-align: start;
@@ -23,10 +28,11 @@
   padding: 0;
 }
 .type {
+  font-family: "STSong";
   padding: 0.2em;
   font-weight: bold;
-  color: rgb(252, 252, 252);
-  background-color: rgb(153, 153, 153);
+  color: rgb(0, 0, 0);
+  background-color: rgb(236, 236, 236);
 }
 .delete-btn,
 .edit-btn {
@@ -34,16 +40,14 @@
   border: none;
   width: 100%;
   height: 100%;
-  background-color: rgb(231, 231, 231);
+  background-color: white;
   cursor: pointer;
 }
 .edit-btn:hover {
-  background-color: rgb(215, 255, 210);
-  color: rgb(0, 128, 0);
+  color: rgb(102, 223, 102);
 }
 .delete-btn:hover {
-  background-color: rgb(255, 201, 199);
-  color: rgb(175, 11, 11);
+  color: rgb(247, 136, 136);
 }
 input,
 textarea {
@@ -84,24 +88,22 @@ textarea::placeholder {
   box-shadow: 0.7px 0.7px 1.2px rgb(2, 42, 68);
 }
 form {
-  background-color: rgb(245, 245, 245);
   margin: 0;
   padding: 1em 1em;
-  border: 1px solid black;
 }
 h4 {
+  font-family: "STHeiti";
   margin: 1em 0;
   color: rgb(119, 119, 119);
-}
-.container {
-  margin: 0 1em;
 }
 h1 {
   color: rgb(58, 58, 58);
   display: inline-block;
   text-shadow: 2px 2px 4px rgb(204, 204, 204);
+  font-family: "STKaiti";
 }
 h2 {
+  font-family: "STFangsong";
   color: rgb(83, 83, 83);
   text-shadow: 1px 1px 0 rgb(212, 212, 212);
   padding-bottom: 0.3em;
@@ -111,6 +113,7 @@ h2 {
   margin: 2.3em 0 auto auto;
 }
 .logout-link {
+  font-family: "STZhongsong";
   text-decoration: none;
   color: rgb(6, 21, 150);
 }
@@ -125,6 +128,7 @@ h2 {
   position: absolute;
 }
 #FileUpload + label {
+  font-family: "STHeiti";
   padding: 0.3em 0.7em;
   margin: 0.2em 0;
   border: 1px solid rgb(117, 117, 117);
@@ -137,10 +141,44 @@ h2 {
   background-color: rgb(255, 255, 255);
 }
 .show-add-card {
+  font-family: "STFangsong";
+  font-size: 1.2rem;
   float: right;
   margin: 0.7em 0;
+  border: none;
+  padding: 0.3em 0.5em;
+  cursor: pointer;
+  border: 1px solid rgb(80, 80, 80);
+  background-color: rgb(255, 255, 255);
+  font-weight: bold;
+  color: rgb(80, 80, 80);
+  border-radius: 0.5rem;
+  transition: background-color 100ms ease-in;
 }
-@media only screen and (min-width: 525px) {
+.show-add-card:hover {
+  background-color: rgb(236, 236, 236);
+}
+@media only screen and (min-width: 630px) {
+  .container {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .title-container {
+    margin: 0 7em;
+  }
+  .grid-container {
+    border: none;
+  }
+  .grid-item {
+    border: none;
+    border-bottom: 0.1px solid rgb(221, 221, 221);
+    padding: 0 0.2em;
+    word-break: normal;
+  }
+  .type {
+    background-color: white;
+    font-size: 0.9rem;
+  }
   .add-news-card {
     width: 70%;
     margin: 0 auto;
@@ -150,5 +188,13 @@ h2 {
   }
   #FileUpload + label {
     text-align: left;
+  }
+}
+@media only screen and (min-width: 1012px) {
+  .container {
+    width: 70%;
+  }
+  .grid-item {
+    padding: 0 0.4em;
   }
 }
