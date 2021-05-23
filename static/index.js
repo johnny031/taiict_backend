@@ -188,9 +188,9 @@ function updateHtml(author, title, file_field, content) {
       `
     );
   } else {
-    list = [file_field, content, title, "", author]
+    list = [file_field.toString(), content, title, "", author]
     $("#" + edit).parent(".edit-grid").prevUntil(".btn-grid").each(function (index, element) {
-      if (index == 0 && file_field == 0) return;
+      if (index == 0 && file_field == "0") return;
       if (index == 3) {
         $(element).attr("id", "temp_datetime");
         return;
