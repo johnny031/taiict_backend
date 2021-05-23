@@ -23,8 +23,8 @@
     <div class="grid-item">{{ item.datetime }}</div>
     <div class="grid-item">{{ item.title }}</div>
     <div class="grid-item news-content">
-      {{ item.content | replace("&lt;", "<") | replace("&gt;", ">") |
-      replace("&nbsp;"," ") | replace("<"+"br/>", " ") }}
+      {{- item.content | replace("&lt;", "<") | replace("&gt;", ">") |
+      replace("&nbsp;", " ") | replace("<"+"br/>", "\n") -}}
     </div>
     <div class="grid-item">{{ item.files|length }}</div>
     <div class="grid-item edit-grid">

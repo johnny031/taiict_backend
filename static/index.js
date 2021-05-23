@@ -10,7 +10,7 @@ $(document).on("click", ".edit-btn", function () {
   edit = $(this).attr("id");
   let data = [];
   $(this).parent(".edit-grid").prevUntil(".btn-grid").each(function () {
-    data.push($(this).html());
+    data.push(plainTextToTag($(this).html()));
   });
   $("form[name='add-news-form']").show();
   $(".news-data-div").hide();
@@ -42,8 +42,8 @@ $(".add-news-btn").on("click", function () {
   if (!data) {
     return false;
   }
-  const { author, title, file_field, news_data, content_js } = data;
-  updateHtml(author, title, file_field, content_js);
+  const { author, title, file_field, news_data, content } = data;
+  updateHtml(author, title, file_field, content);
   $.ajax({
     type: "POST",
     url: "/add-news",
@@ -88,6 +88,13 @@ function tagToPlainText(code) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
   return text;
+}
+function plainTextToTag(text) {
+  let tag = text
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+  return tag;
 }
 //change label text when image selected
 $("#FileUpload").on("change", function () {
@@ -138,11 +145,10 @@ function processData() {
   let content_db = is_premium
     ? content.replace(/\n/g, "<br/>")
     : tagToPlainText(content).replace(/\n/g, "<br/>").replace(/ /g, "&nbsp;");
-  let content_js = tagToPlainText(content);
   news_data.append("content", content_db);
   return {
     author: author, title: title, file_field: file_field
-    , news_data: news_data, content_js: content_js
+    , news_data: news_data, content: content
   }
 }
 function check_data(id) {
@@ -154,7 +160,7 @@ function check_data(id) {
     return true;
   }
 }
-function updateHtml(author, title, file_field, content_js) {
+function updateHtml(author, title, file_field, content) {
   if (edit == "") {
     $(".grid-container").append(
       `
@@ -166,7 +172,7 @@ function updateHtml(author, title, file_field, content_js) {
       tagToPlainText(title) +
       `</div>
       <div class="grid-item news-content">` +
-      content_js +
+      tagToPlainText(content) +
       `</div>
       <div class="grid-item">`+ file_field + `</div>
       <div class="grid-item edit-grid">
@@ -182,14 +188,14 @@ function updateHtml(author, title, file_field, content_js) {
       `
     );
   } else {
-    list = [file_field, content_js, title, "", author]
+    list = [file_field, content, title, "", author]
     $("#" + edit).parent(".edit-grid").prevUntil(".btn-grid").each(function (index, element) {
       if (index == 0 && file_field == 0) return;
       if (index == 3) {
         $(element).attr("id", "temp_datetime");
         return;
       }
-      $(element).html(list[index]);
+      $(element).html(tagToPlainText(list[index]));
     });
   }
 }

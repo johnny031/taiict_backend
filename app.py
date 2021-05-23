@@ -62,7 +62,7 @@ class File(db.Model):
 # News.query.filter(News.newsId == 302).update({"author":"UPDATED", "title":"TITLE"})
 # db.session.commit()
 
-# news_del = News.query.filter_by(newsId=364).first()
+# news_del = News.query.filter_by(newsId=381).first()
 # db.session.delete(news_del)
 # db.session.commit()
 
