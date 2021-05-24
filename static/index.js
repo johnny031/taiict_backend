@@ -4,9 +4,7 @@ $(".show-add-card").on("click", function () {
   $(".news-data-div").hide();
 })
 $(document).on("click", ".edit-btn", function () {
-  if (!check_data($(this).attr("id"))) {
-    return false;
-  }
+  if (!check_data($(this).attr("id"))) return false;
   edit = $(this).attr("id");
   let data = [];
   $(this).parent(".edit-grid").prevUntil(".btn-grid").each(function () {
@@ -22,12 +20,8 @@ $(document).on("click", ".edit-btn", function () {
   $(".add-news-btn").html("更新");
 })
 $(document).on("click", ".delete-btn", function () {
-  if (!check_data($(this).attr("id"))) {
-    return false;
-  }
-  if (!confirm("確定刪除此則最新消息？")) {
-    return false;
-  }
+  if (!check_data($(this).attr("id"))) return false;
+  if (!confirm("確定刪除此則最新消息？")) return false;
   fetch("/json-data", {
     method: "POST",
     body: JSON.stringify({ newsId: $(this).attr("id") }),
@@ -39,9 +33,7 @@ $(document).on("click", ".delete-btn", function () {
 });
 $(".add-news-btn").on("click", function () {
   let data = processData();
-  if (!data) {
-    return false;
-  }
+  if (!data) return false;
   const { author, title, file_field, news_data, content } = data;
   updateHtml(author, title, file_field, content);
   $.ajax({
@@ -71,38 +63,10 @@ $(".add-news-btn").on("click", function () {
   $("#FileUpload + label").html("附件");
   $(".add-news-btn").html("新增")
 });
-function validateLoginForm() {
-  let name = document.forms["login-form"]["name"].value;
-  let password = document.forms["login-form"]["password"].value;
-  if (name == "" || password == "") {
-    alert("欄位請勿空白");
-    return false;
-  }
-}
-$(".close").on("click", function () {
-  $(".alert-message").hide();
-});
-function tagToPlainText(code) {
-  let text = code
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-  return text;
-}
-function plainTextToTag(text) {
-  let tag = text
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">");
-  return tag;
-}
-//change label text when image selected
 $("#FileUpload").on("change", function () {
   let fileExtension = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'doc', 'xlsx', 'pptx', 'ppt'];
   let file_size = 0;
-  for (let i = 0; i < this.files.length; i++) {
-    file_size += this.files[i].size
-  }
+  for (let i = 0; i < this.files.length; i++) file_size += this.files[i].size;
   if (file_size > 500 * 1024) { // 500KB
     alert("附件已超出容量限制500KB")
     $(this).val("");
@@ -116,86 +80,6 @@ $("#FileUpload").on("change", function () {
     $(this).next().text(this.files.length + "個檔案");
   }
 });
-
-function processData() {
-  let author = $("input[name=author]").val();
-  let title = $("input[name=title]").val();
-  let content = $("textarea[name=content]").val();
-  let fileObj = document.getElementById("FileUpload").files;
-  if (author == "" || title == "" || content == "") {
-    alert("欄位請勿空白");
-    return false;
-  } else if (author.length > 50 || title.length > 80 || content.length > 3000) {
-    alert("字數過多");
-    return false;
-  }
-  $("form[name='add-news-form']").hide();
-  $(".news-data-div").show();
-  let file_field = fileObj.length;
-  let news_data = new FormData();
-  for (let i = 0; i < fileObj.length; i++) {
-    news_data.append("file", fileObj[i]);
-  }
-  news_data.append("author", author);
-  news_data.append("title", title);
-  news_data.append("edit", edit);
-  $("input[name=author], input[name=title], textarea[name=content], input[type='file']").val("");
-  $("#FileUpload + label").html("附件")
-  let is_premium = username === "Mary";
-  let content_db = is_premium
-    ? content.replace(/\n/g, "<br/>")
-    : tagToPlainText(content).replace(/\n/g, "<br/>").replace(/ /g, "&nbsp;");
-  news_data.append("content", content_db);
-  return {
-    author: author, title: title, file_field: file_field
-    , news_data: news_data, content: content
-  }
-}
-function check_data(id) {
-  let idIsNum = /^\d+$/.test(id);
-  if (!idIsNum) {
-    alert("資料尚未就緒，請稍候");
-    return false;
-  } else {
-    return true;
-  }
-}
-function updateHtml(author, title, file_field, content) {
-  if (edit == "") {
-    $(".grid-container").append(
-      `
-      <div class="grid-item">` +
-      tagToPlainText(author) +
-      `</div>
-      <div class="grid-item" id="temp_datetime">0000/00/00 00:00:00</div>
-      <div class="grid-item">` +
-      tagToPlainText(title) +
-      `</div>
-      <div class="grid-item news-content">` +
-      tagToPlainText(content) +
-      `</div>
-      <div class="grid-item">`+ file_field + `</div>
-      <div class="grid-item edit-grid">
-        <button class="edit-btn" id="edit_temp_id">
-          <span><i class="fas fa-pen"></i></span>
-        </button>
-      </div>
-      <div class="grid-item btn-grid">
-        <button class="delete-btn" id="temp_id">
-          <span><i class="fas fa-trash"></i></span>
-        </button>
-      </div>
-      `
-    );
-  } else {
-    list = [file_field.toString(), content, title, "", author]
-    $("#" + edit).parent(".edit-grid").prevUntil(".btn-grid").each(function (index, element) {
-      if (index == 0 && file_field == "0") return;
-      if (index == 3) {
-        $(element).attr("id", "temp_datetime");
-        return;
-      }
-      $(element).html(tagToPlainText(list[index]));
-    });
-  }
-}
+$(".close").on("click", function () {
+  $(".alert-message").hide();
+});

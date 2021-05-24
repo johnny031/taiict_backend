@@ -18,9 +18,9 @@
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="{{ url_for('static', filename='index.js') }}"></script>
+  <script src="{{ url_for('static', filename='function.js') }}"></script>
   <script>
-    if ("{{ username|safe }}".length > 0) {
-      var username = "{{ username|safe }}";
-    }
+    var is_premium = false;
+    if ("{{ is_premium|safe }}" === "True") is_premium = true;
   </script>
 </html>
