@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from models import db, News, File
 import os
 
-add_news = Blueprint("add", __name__, static_folder="static", template_folder="templates")
+add_news = Blueprint("add", __name__)
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'doc', 'xlsx', 'pptx', 'ppt'])
 def allowed_file(filename):

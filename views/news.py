@@ -2,7 +2,7 @@ from flask import Blueprint, render_template
 from flask_login import current_user, login_required
 from models import News
 
-news = Blueprint("news", __name__, static_folder="static", template_folder="templates")
+news = Blueprint("news", __name__)
 
 @news.route('/news-list', methods=["GET"])
 @login_required

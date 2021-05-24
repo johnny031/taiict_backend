@@ -4,7 +4,7 @@ from models import db, News, File
 import json
 import os
 
-delete_news = Blueprint("delete", __name__, static_folder="static", template_folder="templates")
+delete_news = Blueprint("delete", __name__)
 
 @delete_news.route('/json-data', methods=["GET","POST"])
 @cross_origin()

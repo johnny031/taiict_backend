@@ -4,7 +4,7 @@ from sqlalchemy import func
 from werkzeug.security import check_password_hash
 from flask_login import login_user
 
-login = Blueprint("login", __name__, static_folder="static", template_folder="templates")
+login = Blueprint("login", __name__)
 
 @login.route("/", methods=['GET', 'POST'])
 def user_login(): 

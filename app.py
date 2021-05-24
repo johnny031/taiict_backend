@@ -3,16 +3,16 @@ from flask_login import LoginManager, login_required, logout_user
 from datetime import timedelta
 import dj_database_url
 from models import db, User
-from login import login
-from news import news
-from add_news import add_news
-from delete_news import delete_news
+from views.login import login
+from views.news import news
+from views.add_news import add_news
+from views.delete_news import delete_news
 # from werkzeug.security import generate_password_hash
 app = Flask(__name__)
-app.register_blueprint(login, url_prefix="")
-app.register_blueprint(news, url_prefix="")
-app.register_blueprint(add_news, url_prefix="")
-app.register_blueprint(delete_news, url_prefix="")
+app.register_blueprint(login)
+app.register_blueprint(news)
+app.register_blueprint(add_news)
+app.register_blueprint(delete_news)
 
 app.config["SECRET_KEY"] = "Thisismysecretkeyandsupposenottobeknownfromothers"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
