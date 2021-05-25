@@ -14,9 +14,11 @@ app.register_blueprint(news)
 app.register_blueprint(add_news)
 app.register_blueprint(delete_news)
 
-app.config["SECRET_KEY"] = "Thisismysecretkeyandsupposenottobeknownfromothers"
+app.config['SECRET_KEY'] = 'Thisismysecretkeyandsupposenottobeknownfromothers'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy'
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
+app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
 # heroku connect database settings
 DATABASES = {
     'default': 'mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy'
