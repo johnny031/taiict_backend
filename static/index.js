@@ -110,6 +110,10 @@ $("#FileUpload").on("change", function () {
       alert("不支援的檔案格式，只支援：" + fileExtension.join(', '));
       $(this).val("");
       return false;
+    } else if (this.files[i].name.length > 50) {
+      alert("檔案名稱過長，上限為50字");
+      $(this).val("");
+      return false;
     }
   }
   let news_data = new FormData();

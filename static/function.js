@@ -28,7 +28,7 @@ function processData() {
         alert("欄位請勿空白");
         return false;
     } else if (author.length > 50 || title.length > 80 || content.length > 3000) {
-        alert("字數過多");
+        alert("字數過多，字數限制為：類別50字，標題80字，內容3000字");
         return false;
     }
     $("form[name='add-news-form']").hide();
