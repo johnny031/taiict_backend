@@ -1,5 +1,9 @@
 {% extends "layout.html" %} {% block css_href %}
 <link href="{{ url_for('static', filename='news.css') }}" rel="stylesheet" />
+<link
+  href="{{ url_for('static', filename='loadingIcon.css') }}"
+  rel="stylesheet"
+/>
 {% endblock %} {% block title %}變更最新消息{% endblock %} {% block content %}
 <div class="container">
   <div class="title-container">
@@ -61,11 +65,27 @@
       rows="10"
       placeholder="內容 {% if is_premium %}( 允許使用html tag ){% endif %}"
     ></textarea>
-    <div class="flexbox-container">
-      <input id="FileUpload" type="file" multiple />
-      <label for="FileUpload">附件</label>
+    <input id="FileUpload" type="file" multiple />
+    <label for="FileUpload">附件</label>
+    <div class="loader loadingio-spinner-spinner-yjshld8r7re">
+      <div class="ldio-urey01agax">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
+    <ol class="file-list"></ol>
     <button class="add-news-btn" type="submit">新增</button>
   </div>
 </form>
+<div class="loader overlay"></div>
 {% endblock %}

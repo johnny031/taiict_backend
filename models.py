@@ -16,4 +16,4 @@ class News(db.Model):
 class File(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50), nullable=False)
-    news_Id = db.Column(db.Integer, db.ForeignKey("news.newsId"), nullable=False)
+    news_Id = db.Column(db.Integer, db.ForeignKey("news.newsId"))

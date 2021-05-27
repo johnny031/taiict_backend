@@ -94,6 +94,10 @@ form {
   margin: 0;
   padding: 1em 1em;
 }
+h2,
+h4 {
+  text-align: center;
+}
 h4 {
   font-family: "STHeiti";
   margin: 1em 0;
@@ -123,9 +127,6 @@ h2 {
 .logout-link:hover {
   color: rgb(102, 102, 206);
 }
-.flexbox-container {
-  display: flex;
-}
 #FileUpload {
   width: 0;
   opacity: 0;
@@ -133,8 +134,9 @@ h2 {
 }
 #FileUpload + label {
   font-family: "STHeiti";
-  padding: 0.3em 0.7em;
-  margin: 0.2em 0;
+  display: inline-block;
+  padding: 0.4em 0.7em;
+  margin: 0.3em 0;
   border: 1px solid rgb(117, 117, 117);
   border-radius: 3px;
   color: rgb(22, 22, 22);
@@ -162,6 +164,31 @@ h2 {
 .show-add-card:hover {
   background-color: rgb(236, 236, 236);
 }
+.file-list {
+  padding-left: 1.2em;
+  margin: 0.5em 0;
+}
+.file-list a {
+  text-decoration: none;
+  color: rgb(13, 111, 175);
+}
+.file-list a:hover {
+  color: rgb(58, 7, 116);
+}
+.file-list button {
+  font-size: 1.2rem;
+  background: none;
+  border: none;
+  color: rgb(252, 123, 123);
+  cursor: pointer;
+}
+.file-list button:hover {
+  color: rgb(255, 0, 0);
+  text-shadow: 0.3px 0.3px 0.3px black;
+}
+.fa-times {
+  transform: translateY(2px);
+}
 @media only screen and (min-width: 630px) {
   .container {
     width: 90%;
@@ -186,9 +213,6 @@ h2 {
   .add-news-card {
     width: 70%;
     margin: 0 auto;
-  }
-  form {
-    text-align: center;
   }
   #FileUpload + label {
     text-align: left;

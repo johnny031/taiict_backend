@@ -2,17 +2,21 @@ from flask import Flask, url_for, redirect, session
 from flask_login import LoginManager, login_required, logout_user
 from datetime import timedelta
 import dj_database_url
-from models import db, User
+from models import db, User, File, News
 from views.login import login
 from views.news import news
 from views.add_news import add_news
 from views.delete_news import delete_news
+from views.upload import upload
+from views.delete_file import delete_file
 # from werkzeug.security import generate_password_hash
 app = Flask(__name__)
 app.register_blueprint(login)
 app.register_blueprint(news)
 app.register_blueprint(add_news)
 app.register_blueprint(delete_news)
+app.register_blueprint(upload)
+app.register_blueprint(delete_file)
 
 app.config['SECRET_KEY'] = 'Thisismysecretkeyandsupposenottobeknownfromothers'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -31,7 +35,14 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login.user_login"
 login_manager.login_message = "您沒有權限，請先登入"
-
+# with app.app_context():
+#     a = News.query.filter_by(newsId=468).first()
+#     db.session.delete(a)
+#     db.session.commit()
+    # test = News.query.all()
+    # print(test)
+    # test1 = File.query.all()
+    # print(test1)
 @login_manager.user_loader
 def load_user(id):
     user = User.query.get(id)

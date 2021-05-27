@@ -4,7 +4,7 @@ from models import db, News, File
 import json
 import os
 
-delete_news = Blueprint("delete", __name__)
+delete_news = Blueprint("delete_news", __name__)
 
 @delete_news.route('/json-data', methods=["GET","POST"])
 @cross_origin()
@@ -15,7 +15,10 @@ def news_delete():
         files_del = File.query.filter_by(news_Id=newsId).all()
         for file_del in files_del:
             if file_del is not None:
-                os.remove(os.path.join('static/uploads/', str(file_del.id) + "_" + file_del.name))
+                try:
+                    os.remove(os.path.join('static/uploads/', str(file_del.id) + "_" + file_del.name))
+                except:
+                    pass
         news_del = News.query.filter_by(newsId=newsId).first()
         db.session.delete(news_del)
         db.session.commit()

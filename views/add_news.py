@@ -18,44 +18,25 @@ def news_add():
         author = request.form["author"]
         title = request.form["title"]
         content = request.form["content"]
+        file_id = request.form.getlist("file_id")
+
         edit = request.form["edit"]   
         tz = timezone(timedelta(hours=+8))
         datetime_str = datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
         session["datetime_str"] = datetime_str      
         if not len(edit) > 0:
             new_news = News(author=author, datetime=datetime_str, title=title, content=content)
-            db.session.add(new_news)  
+            db.session.add(new_news) 
+            db.session.commit()
+            for i in file_id:
+                file_add = File.query.filter_by(id=i).first()
+                file_add.news = new_news
         else:
             News.query.filter(News.newsId == edit).update({"author":author, "datetime":datetime_str, "title":title, "content":content})
+            for i in file_id:
+                File.query.filter(File.id == i).update({"news_Id":edit})
         db.session.commit()
-        if 'file' not in request.files:
-            return jsonify({}) 
-        files = request.files.getlist("file")
-        if len(edit) > 0:
-            files_del = File.query.filter_by(news_Id=edit).all()
-            for file_del in files_del:
-                if file_del is not None:
-                    os.remove(os.path.join('static/uploads/', str(file_del.id) + "_" + file_del.name))            
-                db.session.delete(file_del)
-                db.session.commit()
-        for file in files:
-            if file.filename == '':
-                continue
-            if not file or not allowed_file(file.filename):
-                continue
-            filename = secure_filename(file.filename)
-            if len(filename) < 4:
-                filename = "." + filename
-            if len(edit) > 0:
-                file_obj = File(name=filename, news_Id=edit)
-            else:
-                file_obj = File(name=filename, news=new_news)
-            db.session.add(file_obj)
-            db.session.commit()
-            new_file = db.session.query(File).order_by(File.id.desc()).first()
-            _id = str(new_file.id)
-            file.save(os.path.join('static/uploads/', _id + "_" + filename))
-        return jsonify({})  
+        return jsonify({})
     else:  
         news_added = News.query.filter_by(datetime=session["datetime_str"]).first()
         session.pop("datetime_str")

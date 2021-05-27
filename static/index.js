@@ -16,8 +16,29 @@ $(document).on("click", ".edit-btn", function () {
   $("input[name=author]").val(data[4]);
   $("input[name=title]").val(data[2]);
   $("textarea[name=content]").val(data[1]);
-  $("#FileUpload + label").html("重新上傳");
   $(".add-news-btn").html("更新");
+  if (data[0] === "0") return false;
+  $.ajax({
+    method: "POST",
+    url: "/delete-file",
+    data: { "edit": edit },
+    beforeSend: function () {
+      $('.loader').show();
+    },
+    success: function (data) {
+      for (let i = 0; i < data.length; i++) {
+        $(".file-list").append(`
+          <li>
+            <a href="`+ data[i][0] + `_` + data[i][1] + `" target="_blank" download="` + data[i][1] + `">` + data[i][1] + `</a>
+            <button class="delete-file" data-id="`+ data[i][0] + `"><i class="fas fa-times"></i></button>
+          </li>
+        `);
+      }
+    },
+    complete: function () {
+      $('.loader').hide();
+    },
+  });
 })
 $(document).on("click", ".delete-btn", function () {
   if (!check_data($(this).attr("id"))) return false;
@@ -32,6 +53,15 @@ $(document).on("click", ".delete-btn", function () {
   $(this).parent(".btn-grid").remove();
 });
 $(".add-news-btn").on("click", function () {
+  let ready = true;
+  $(".delete-file").each(function () {
+    if ($(this).data("id") === undefined) {
+      alert("資料尚未就緒，請稍候");
+      ready = false;
+      return false;
+    }
+  })
+  if (!ready) return false;
   let data = processData();
   if (!data) return false;
   const { author, title, file_field, news_data, content } = data;
@@ -44,6 +74,9 @@ $(".add-news-btn").on("click", function () {
     contentType: false,
     cache: false,
     processData: false,
+    beforeSend: function () {
+      $('.loader').show();
+    },
   }).then((_res) => {
     $.ajax({
       method: "GET",
@@ -56,30 +89,81 @@ $(".add-news-btn").on("click", function () {
         $("#temp_datetime").html(data[1]);
         $("#temp_datetime").removeAttr("id");
       },
+      complete: function () {
+        $('.loader').hide();
+      },
     });
   });
   edit = "";
   $(".add-news-title").html("新增最新消息")
-  $("#FileUpload + label").html("附件");
   $(".add-news-btn").html("新增")
+  $(".file-list").empty();
 });
 $("#FileUpload").on("change", function () {
   let fileExtension = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'doc', 'xlsx', 'pptx', 'ppt'];
-  let file_size = 0;
-  for (let i = 0; i < this.files.length; i++) file_size += this.files[i].size;
-  if (file_size > 500 * 1024) { // 500KB
-    alert("附件已超出容量限制500KB")
-    $(this).val("");
-    $(this).next().text("附件");
-  } else if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-    alert("不支援的檔案格式，只支援：" + fileExtension.join(', '));
-    $(this).val("");
-    $(this).next().text("附件");
+  for (let i = 0; i < this.files.length; i++) {
+    if (this.files[i].size > 500 * 1024) {
+      alert("附件已超出單一檔案容量限制500KB")
+      $(this).val("");
+      return false;
+    } else if ($.inArray(this.files[i].name.split('.').pop().toLowerCase(), fileExtension) == -1) {
+      alert("不支援的檔案格式，只支援：" + fileExtension.join(', '));
+      $(this).val("");
+      return false;
+    }
   }
-  if ($(this).val() != "") {
-    $(this).next().text(this.files.length + "個檔案");
+  let news_data = new FormData();
+  for (let i = 0; i < this.files.length; i++) {
+    news_data.append("file", this.files[i]);
+    $(".file-list").append(`
+    <li>
+      <a href="#" target="_blank" download="`+ this.files[i].name + `">` + this.files[i].name + `</a>
+      <button class="delete-file temp_class"><i class="fas fa-times"></i></button>
+    </li>`)
   }
+  $.ajax({
+    type: "POST",
+    url: "/upload",
+    data: news_data,
+    dataType: "json",
+    contentType: false,
+    cache: false,
+    processData: false,
+    beforeSend: function () {
+      $('.loader').show();
+    },
+  }).then((_res) => {
+    $.ajax({
+      method: "GET",
+      url: "/upload",
+      success: function (data) {
+        $(".temp_class").each(function (index) {
+          $(this).data("id", data[0][index]);
+          $(this).parent("li").children("a").attr("href", data[0][index] + "_" + data[1][index]);
+          $(this).removeClass("temp_class");
+        })
+      },
+      complete: function () {
+        $('.loader').hide();
+      },
+    });
+  });
 });
+$(document).on("click", ".delete-file", function () {
+  if ($(this).data("id") === undefined) {
+    alert("資料尚未就緒，請稍候");
+    return false;
+  }
+  let filename = $(this).parent("li").children("a").html();
+  if (!confirm("確定刪除 " + filename + " 嗎？")) return false;
+  let file_id = $(this).data("id");
+  $.ajax({
+    method: "POST",
+    url: "/delete-file",
+    data: { "file_id": file_id },
+  });
+  $(this).parent("li").remove();
+})
 $(".close").on("click", function () {
   $(".alert-message").hide();
 });

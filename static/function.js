@@ -24,7 +24,6 @@ function processData() {
     let author = $("input[name=author]").val();
     let title = $("input[name=title]").val();
     let content = $("textarea[name=content]").val();
-    let fileObj = document.getElementById("FileUpload").files;
     if (author == "" || title == "" || content == "") {
         alert("欄位請勿空白");
         return false;
@@ -34,17 +33,15 @@ function processData() {
     }
     $("form[name='add-news-form']").hide();
     $(".news-data-div").show();
-    let file_field = fileObj.length;
+    let file_field = $(".delete-file").length;
     let news_data = new FormData();
-    for (let i = 0; i < fileObj.length; i++) {
-        news_data.append("file", fileObj[i]);
-    }
+    $(".delete-file").each(function () {
+        news_data.append("file_id", $(this).data("id"));
+    });
     news_data.append("author", author);
     news_data.append("title", title);
     news_data.append("edit", edit);
-    $(
-        "input[name=author], input[name=title], textarea[name=content], input[type='file']"
-    ).val("");
+    $("input[name=author], input[name=title], textarea[name=content], input[type='file']").val("");
     $("#FileUpload + label").html("附件");
     let content_db = is_premium
         ? content.replace(/\n/g, "<br/>")
@@ -99,7 +96,6 @@ function updateHtml(author, title, file_field, content) {
     } else {
         list = [file_field.toString(), content, title, "", author];
         $("#" + edit).parent(".edit-grid").prevUntil(".btn-grid").each(function (index, element) {
-            if (index == 0 && file_field == "0") return;
             if (index == 3) {
                 $(element).attr("id", "temp_datetime");
                 return;
