@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required
 from models import db, File
+import shutil
 import os
 
 delete_file = Blueprint("delete_file", __name__)
@@ -17,7 +18,7 @@ def file_delete():
         file_id = request.form["file_id"]
         file_del = File.query.filter_by(id=file_id).first()
         try:
-            os.remove(os.path.join('static/uploads/', str(file_del.id) + "_" + file_del.name))
+            shutil.rmtree(os.path.join('static/uploads/', str(file_del.id)))
         except:
             pass
         File.query.filter(File.id == file_id).delete(synchronize_session=False)

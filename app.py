@@ -1,4 +1,4 @@
-from flask import Flask, url_for, redirect, session
+from flask import Flask, url_for, redirect, session, send_from_directory
 from flask_login import LoginManager, login_required, logout_user
 from datetime import timedelta
 import dj_database_url
@@ -9,6 +9,7 @@ from views.add_news import add_news
 from views.delete_news import delete_news
 from views.upload import upload
 from views.delete_file import delete_file
+import os
 # from werkzeug.security import generate_password_hash
 app = Flask(__name__)
 app.register_blueprint(login)
@@ -36,13 +37,13 @@ login_manager.init_app(app)
 login_manager.login_view = "login.user_login"
 login_manager.login_message = "您沒有權限，請先登入"
 # with app.app_context():
-#     a = News.query.filter_by(newsId=468).first()
+#     a = File.query.filter_by(id=509).first()
 #     db.session.delete(a)
 #     db.session.commit()
-    # test = News.query.all()
-    # print(test)
-    # test1 = File.query.all()
-    # print(test1)
+#     test = News.query.all()
+#     print(test)
+#     test1 = File.query.all()
+#     print(test1)
 @login_manager.user_loader
 def load_user(id):
     user = User.query.get(id)
@@ -59,9 +60,11 @@ def logout():
     logout_user()
     return redirect(url_for('login.user_login'))
 
-@app.route('/<filename>')
-def display_image(filename):
-	return redirect(url_for('static', filename='uploads/' + filename), code=301)
+@app.route('/download/<file_id>')
+def download(file_id):
+    path = os.path.join("static/uploads/", file_id)
+    dirs = os.listdir(path)
+    return send_from_directory(path, dirs[0], as_attachment=True)
 
 if __name__ == 'main':
     db.create_all()

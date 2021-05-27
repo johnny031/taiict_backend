@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_cors import cross_origin
 from models import db, News, File
+import shutil
 import json
 import os
 
@@ -16,7 +17,7 @@ def news_delete():
         for file_del in files_del:
             if file_del is not None:
                 try:
-                    os.remove(os.path.join('static/uploads/', str(file_del.id) + "_" + file_del.name))
+                    shutil.rmtree(os.path.join('static/uploads/', str(file_del.id)))
                 except:
                     pass
         news_del = News.query.filter_by(newsId=newsId).first()

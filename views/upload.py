@@ -17,22 +17,18 @@ def upload_file():
         for file in files:
             if file.filename == '':
                 continue
-            filename = secure_filename(file.filename)
-            if "." not in filename:
-                filename = "." + filename
+            filename = file.filename
             file_obj = File(name=filename)
             db.session.add(file_obj)
             db.session.commit()
             new_file = db.session.query(File).order_by(File.id.desc()).first()
             _id = str(new_file.id)
             session["files_id"].append(_id)
-            file.save(os.path.join('static/uploads/', _id + "_" + filename))
+            path = os.path.join("static/uploads/", _id)
+            os.makedirs(path)
+            file.save(os.path.join(path, filename))
         return jsonify({})  
     else:    
         file_id = session["files_id"]
-        filenames = []
-        for i in file_id:
-            item = File.query.filter_by(id=i).first()
-            filenames.append(item.name)
         session.pop("files_id")
-        return jsonify(file_id, filenames)
+        return jsonify(file_id)

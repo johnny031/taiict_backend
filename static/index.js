@@ -29,7 +29,7 @@ $(document).on("click", ".edit-btn", function () {
       for (let i = 0; i < data.length; i++) {
         $(".file-list").append(`
           <li>
-            <a href="`+ data[i][0] + `_` + data[i][1] + `" target="_blank" download="` + data[i][1] + `">` + data[i][1] + `</a>
+            <a href="download/`+ data[i][0] + `" target="_blank" download="` + data[i][1] + `">` + data[i][1] + `</a>
             <button class="delete-file" data-id="`+ data[i][0] + `"><i class="fas fa-times"></i></button>
           </li>
         `);
@@ -143,7 +143,7 @@ $("#FileUpload").on("change", function () {
       success: function (data) {
         $(".temp_class").each(function (index) {
           $(this).data("id", data[0][index]);
-          $(this).parent("li").children("a").attr("href", data[0][index] + "_" + data[1][index]);
+          $(this).parent("li").children("a").attr("href", "download/" + data[0][index]);
           $(this).removeClass("temp_class");
         })
       },
