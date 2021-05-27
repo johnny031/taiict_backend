@@ -37,7 +37,7 @@ login_manager.init_app(app)
 login_manager.login_view = "login.user_login"
 login_manager.login_message = "您沒有權限，請先登入"
 # with app.app_context():
-#     a = File.query.filter_by(id=509).first()
+#     a = News.query.filter_by(newsId=509).first()
 #     db.session.delete(a)
 #     db.session.commit()
 #     test = News.query.all()

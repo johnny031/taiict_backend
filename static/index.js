@@ -142,8 +142,8 @@ $("#FileUpload").on("change", function () {
       url: "/upload",
       success: function (data) {
         $(".temp_class").each(function (index) {
-          $(this).data("id", data[0][index]);
-          $(this).parent("li").children("a").attr("href", "download/" + data[0][index]);
+          $(this).data("id", data[index]);
+          $(this).parent("li").children("a").attr("href", "download/" + data[index]);
           $(this).removeClass("temp_class");
         })
       },
