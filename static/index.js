@@ -102,7 +102,7 @@ $(".add-news-btn").on("click", function () {
   $(".file-list").empty();
 });
 $("#FileUpload").on("change", function () {
-  let fileExtension = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'doc', 'xlsx', 'pptx', 'ppt'];
+  let fileExtension = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'doc', 'xlsx', 'xls', 'pptx', 'ppt'];
   for (let i = 0; i < this.files.length; i++) {
     if (this.files[i].size > 500 * 1024) {
       alert("附件已超出單一檔案容量限制500KB")
@@ -135,6 +135,9 @@ $("#FileUpload").on("change", function () {
     contentType: false,
     cache: false,
     processData: false,
+    beforeSend: function () {
+      $('.loader').show();
+    },
   }).then((_res) => {
     $.ajax({
       method: "GET",
@@ -145,6 +148,9 @@ $("#FileUpload").on("change", function () {
           $(this).parent("li").children("a").attr("href", "download/" + data[index]);
           $(this).removeClass("temp_class");
         })
+      },
+      complete: function () {
+        $('.loader').hide();
       },
     });
   });
