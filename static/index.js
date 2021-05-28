@@ -24,6 +24,7 @@ $(document).on("click", ".edit-btn", function () {
     data: { "edit": edit },
     beforeSend: function () {
       $('.loader').show();
+      $('.add-news-btn').prop('disabled', true);
     },
     success: function (data) {
       for (let i = 0; i < data.length; i++) {
@@ -37,6 +38,7 @@ $(document).on("click", ".edit-btn", function () {
     },
     complete: function () {
       $('.loader').hide();
+      $('.add-news-btn').prop('disabled', false);
     },
   });
 })
@@ -75,7 +77,7 @@ $(".add-news-btn").on("click", function () {
     cache: false,
     processData: false,
     beforeSend: function () {
-      $('.loader').show();
+      $('.overlay').show();
     },
   }).then((_res) => {
     $.ajax({
@@ -90,7 +92,7 @@ $(".add-news-btn").on("click", function () {
         $("#temp_datetime").removeAttr("id");
       },
       complete: function () {
-        $('.loader').hide();
+        $('.overlay').hide();
       },
     });
   });
@@ -121,7 +123,7 @@ $("#FileUpload").on("change", function () {
     news_data.append("file", this.files[i]);
     $(".file-list").append(`
     <li>
-      <a href="#" target="_blank" download="`+ this.files[i].name + `">` + this.files[i].name + `</a>
+      <a target="_blank" download="`+ this.files[i].name + `">` + this.files[i].name + `</a>
       <button class="delete-file temp_class"><i class="fas fa-times"></i></button>
     </li>`)
   }
@@ -133,9 +135,6 @@ $("#FileUpload").on("change", function () {
     contentType: false,
     cache: false,
     processData: false,
-    beforeSend: function () {
-      $('.loader').show();
-    },
   }).then((_res) => {
     $.ajax({
       method: "GET",
@@ -146,9 +145,6 @@ $("#FileUpload").on("change", function () {
           $(this).parent("li").children("a").attr("href", "download/" + data[index]);
           $(this).removeClass("temp_class");
         })
-      },
-      complete: function () {
-        $('.loader').hide();
       },
     });
   });
