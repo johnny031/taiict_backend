@@ -37,15 +37,13 @@ $(document).on("click", ".edit-btn", function () {
         `);
       }
     },
-    error: function (xhr, textStatus) {
-      if (textStatus == 'timeout') {
-        this.tryCount++;
-        if (this.tryCount <= 3) {
-          $.ajax(this);
-          return;
-        }
+    error: function () {
+      this.tryCount++;
+      if (this.tryCount <= 3) {
+        $.ajax(this);
         return;
       }
+      return;
     },
     complete: function () {
       $('.loader').hide();
@@ -99,15 +97,13 @@ $(".add-news-btn").on("click", function () {
       $("#temp_datetime").html(data[1]);
       $("#temp_datetime").removeAttr("id");
     },
-    error: function (xhr, textStatus) {
-      if (textStatus == 'timeout') {
-        this.tryCount++;
-        if (this.tryCount <= 3) {
-          $.ajax(this);
-          return;
-        }
+    error: function () {
+      this.tryCount++;
+      if (this.tryCount <= 3) {
+        $.ajax(this);
         return;
       }
+      return;
     },
     complete: function () {
       $('.overlay').hide();
@@ -163,15 +159,13 @@ $("#FileUpload").on("change", function () {
         $(this).removeClass("temp_class");
       })
     },
-    error: function (xhr, textStatus) {
-      if (textStatus == 'timeout') {
-        this.tryCount++;
-        if (this.tryCount <= 3) {
-          $.ajax(this);
-          return;
-        }
+    error: function () {
+      this.tryCount++;
+      if (this.tryCount <= 3) {
+        $.ajax(this);
         return;
       }
+      return;
     },
     complete: function () {
       $('.loader').hide();
