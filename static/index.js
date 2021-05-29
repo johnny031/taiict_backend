@@ -22,9 +22,10 @@ $(document).on("click", ".edit-btn", function () {
     method: "POST",
     url: "/delete-file",
     data: { "edit": edit },
+    tryCount: 0,
     beforeSend: function () {
       $('.loader').show();
-      $('.add-news-btn').prop('disabled', true);
+      $('.add-news-btn, .cancel-btn').prop('disabled', true);
     },
     success: function (data) {
       for (let i = 0; i < data.length; i++) {
@@ -36,9 +37,19 @@ $(document).on("click", ".edit-btn", function () {
         `);
       }
     },
+    error: function (xhr, textStatus) {
+      if (textStatus == 'timeout') {
+        this.tryCount++;
+        if (this.tryCount <= 3) {
+          $.ajax(this);
+          return;
+        }
+        return;
+      }
+    },
     complete: function () {
       $('.loader').hide();
-      $('.add-news-btn').prop('disabled', false);
+      $('.add-news-btn, .cancel-btn').prop('disabled', false);
     },
   });
 })
@@ -72,6 +83,7 @@ $(".add-news-btn").on("click", function () {
     type: "POST",
     url: "/add-news",
     data: news_data,
+    tryCount: 0,
     dataType: "json",
     contentType: false,
     cache: false,
@@ -79,22 +91,27 @@ $(".add-news-btn").on("click", function () {
     beforeSend: function () {
       $('.overlay').show();
     },
-  }).then((_res) => {
-    $.ajax({
-      method: "GET",
-      url: "/add-news",
-      success: function (data) {
-        if (edit == "") {
-          $("#temp_id").attr("id", data[0]);
-          $("#edit_temp_id").attr("id", data[0]);
+    success: function (data) {
+      if (edit == "") {
+        $("#temp_id").attr("id", data[0]);
+        $("#edit_temp_id").attr("id", data[0]);
+      }
+      $("#temp_datetime").html(data[1]);
+      $("#temp_datetime").removeAttr("id");
+    },
+    error: function (xhr, textStatus) {
+      if (textStatus == 'timeout') {
+        this.tryCount++;
+        if (this.tryCount <= 3) {
+          $.ajax(this);
+          return;
         }
-        $("#temp_datetime").html(data[1]);
-        $("#temp_datetime").removeAttr("id");
-      },
-      complete: function () {
-        $('.overlay').hide();
-      },
-    });
+        return;
+      }
+    },
+    complete: function () {
+      $('.overlay').hide();
+    },
   });
   edit = "";
   $(".add-news-title").html("新增最新消息")
@@ -131,6 +148,7 @@ $("#FileUpload").on("change", function () {
     type: "POST",
     url: "/upload",
     data: news_data,
+    tryCount: 0,
     dataType: "json",
     contentType: false,
     cache: false,
@@ -138,22 +156,27 @@ $("#FileUpload").on("change", function () {
     beforeSend: function () {
       $('.loader').show();
     },
-  }).then((_res) => {
-    $.ajax({
-      method: "GET",
-      url: "/upload",
-      success: function (data) {
-        $(".temp_class").each(function (index) {
-          $(this).data("id", data[index]);
-          $(this).parent("li").children("a").attr("href", "download/" + data[index]);
-          $(this).removeClass("temp_class");
-        })
-      },
-      complete: function () {
-        $('.loader').hide();
-      },
-    });
-  });
+    success: function (data) {
+      $(".temp_class").each(function (index) {
+        $(this).data("id", data[index]);
+        $(this).parent("li").children("a").attr("href", "download/" + data[index]);
+        $(this).removeClass("temp_class");
+      })
+    },
+    error: function (xhr, textStatus) {
+      if (textStatus == 'timeout') {
+        this.tryCount++;
+        if (this.tryCount <= 3) {
+          $.ajax(this);
+          return;
+        }
+        return;
+      }
+    },
+    complete: function () {
+      $('.loader').hide();
+    },
+  })
 });
 $(document).on("click", ".delete-file", function () {
   if ($(this).data("id") === undefined) {
@@ -169,6 +192,12 @@ $(document).on("click", ".delete-file", function () {
     data: { "file_id": file_id },
   });
   $(this).parent("li").remove();
+})
+$(".cancel-btn").on("click", function () {
+  $("form[name='add-news-form']").hide();
+  $(".news-data-div").show();
+  $("input[name='author'], input[name='title'], textarea[name='content'], input[type='file']").val("");
+  $(".file-list").empty();
 })
 $(".close").on("click", function () {
   $(".alert-message").hide();
