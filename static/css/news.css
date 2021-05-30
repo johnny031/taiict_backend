@@ -182,6 +182,7 @@ h2 {
   margin: 0.5em 0;
 }
 .file-list a {
+  word-break: break-word;
   text-decoration: none;
   color: rgb(13, 111, 175);
 }

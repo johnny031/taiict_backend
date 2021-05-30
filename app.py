@@ -2,7 +2,7 @@ from flask import Flask, url_for, redirect, session, send_from_directory
 from flask_login import LoginManager, login_required, logout_user
 from datetime import timedelta
 import dj_database_url
-from models import db, User, File, News
+from models import db, User
 from views.login import login
 from views.news import news
 from views.add_news import add_news
@@ -22,8 +22,7 @@ app.register_blueprint(delete_file)
 app.config['SECRET_KEY'] = 'Thisismysecretkeyandsupposenottobeknownfromothers'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy'
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
-app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 1
 # heroku connect database settings
 DATABASES = {
     'default': 'mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy'

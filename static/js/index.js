@@ -114,6 +114,7 @@ $(".add-news-btn").on("click", function () {
   $(".file-list").empty();
 });
 $("#FileUpload").on("change", function () {
+  if ($(this).val() === "") return false;
   let fileExtension = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'docx', 'doc', 'xlsx', 'xls', 'pptx', 'ppt'];
   for (let i = 0; i < this.files.length; i++) {
     if (this.files[i].size > 500 * 1024) {
