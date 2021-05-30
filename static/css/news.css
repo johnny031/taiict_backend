@@ -54,7 +54,7 @@ input {
 }
 input,
 textarea {
-  padding: 0;
+  padding: 2px 5px;
   margin: 0;
   border: 1px solid rgb(78, 78, 78);
   border-radius: 3px;
