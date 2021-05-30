@@ -49,6 +49,7 @@ input::placeholder {
   padding-left: 0.1em;
 }
 .summit-btn {
+  font-size: 0.8rem;
   margin-top: 1.6em;
   height: 2.4em;
   width: 100%;
