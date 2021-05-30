@@ -71,7 +71,17 @@ function updateHtml(author, title, file_field, content) {
         <div class="grid-item">` +
             tagToPlainText(author) +
             `</div>
-        <div class="grid-item" id="temp_datetime">0000/00/00 00:00:00</div>
+        <div class="grid-item" id="temp_datetime">
+            <div class="loadingio-spinner-ellipsis-w2l1qr6gk3n">
+                <div class="ldio-80g99pgzdvx">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                </div>
+            </div>
+        </div>
         <div class="grid-item">` +
             tagToPlainText(title) +
             `</div>
@@ -98,6 +108,16 @@ function updateHtml(author, title, file_field, content) {
         $("#" + edit).parent(".edit-grid").prevUntil(".btn-grid").each(function (index, element) {
             if (index == 3) {
                 $(element).attr("id", "temp_datetime");
+                $(element).html(`
+                <div class="loadingio-spinner-ellipsis-w2l1qr6gk3n">
+                    <div class="ldio-80g99pgzdvx">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    </div>
+                </div>`);
                 return;
             }
             $(element).html(tagToPlainText(list[index]));

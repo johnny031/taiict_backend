@@ -17,8 +17,8 @@
     {% block content %}{% endblock %}
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="{{ url_for('static', filename='index.js') }}"></script>
-  <script src="{{ url_for('static', filename='function.js') }}"></script>
+  <script src="static/js/index.js"></script>
+  <script src="static/js/function.js"></script>
   <script>
     var is_premium = false;
     if ("{{ is_premium|safe }}" === "True") is_premium = true;

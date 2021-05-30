@@ -1,5 +1,5 @@
 {% extends "layout.html" %} {% block css_href %}
-<link href="{{ url_for('static', filename='index.css') }}" rel="stylesheet" />
+<link href="static/css/index.css" rel="stylesheet" />
 {%endblock %} {% block title %}登入頁面{% endblock %} {% block content %} {%
 with messages = get_flashed_messages() %} {% if messages %}
 <div class="alert-message">

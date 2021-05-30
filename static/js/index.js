@@ -28,6 +28,8 @@ $(document).on("click", ".edit-btn", function () {
       $('.add-news-btn, .cancel-btn').prop('disabled', true);
     },
     success: function (data) {
+      $('.loader').hide();
+      $('.add-news-btn, .cancel-btn').prop('disabled', false);
       for (let i = 0; i < data.length; i++) {
         $(".file-list").append(`
           <li>
@@ -43,11 +45,9 @@ $(document).on("click", ".edit-btn", function () {
         $.ajax(this);
         return;
       }
-      return;
-    },
-    complete: function () {
+      alert("取得檔案失敗，請重新整理後再試一次");
       $('.loader').hide();
-      $('.add-news-btn, .cancel-btn').prop('disabled', false);
+      return;
     },
   });
 })
@@ -90,6 +90,7 @@ $(".add-news-btn").on("click", function () {
       $('.overlay').show();
     },
     success: function (data) {
+      $('.overlay').hide();
       if (edit == "") {
         $("#temp_id").attr("id", data[0]);
         $("#edit_temp_id").attr("id", data[0]);
@@ -103,10 +104,8 @@ $(".add-news-btn").on("click", function () {
         $.ajax(this);
         return;
       }
+      alert("連線失敗，請重新整理後再試一次");
       return;
-    },
-    complete: function () {
-      $('.overlay').hide();
     },
   });
   edit = "";
@@ -153,6 +152,7 @@ $("#FileUpload").on("change", function () {
       $('.loader').show();
     },
     success: function (data) {
+      $('.loader').hide();
       $(".temp_class").each(function (index) {
         $(this).data("id", data[index]);
         $(this).parent("li").children("a").attr("href", "download/" + data[index]);
@@ -165,10 +165,9 @@ $("#FileUpload").on("change", function () {
         $.ajax(this);
         return;
       }
-      return;
-    },
-    complete: function () {
+      alert("上傳失敗，請重新整理後再試一次")
       $('.loader').hide();
+      return;
     },
   })
 });
@@ -192,6 +191,7 @@ $(".cancel-btn").on("click", function () {
   $(".news-data-div").show();
   $("input[name='author'], input[name='title'], textarea[name='content'], input[type='file']").val("");
   $(".file-list").empty();
+  edit = "";
 })
 $(".close").on("click", function () {
   $(".alert-message").hide();
