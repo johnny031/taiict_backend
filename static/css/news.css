@@ -49,6 +49,9 @@
 .delete-btn:hover {
   color: rgb(247, 136, 136);
 }
+input {
+  height: 2.3em;
+}
 input,
 textarea {
   padding: 0;
@@ -57,6 +60,8 @@ textarea {
   border-radius: 3px;
   box-shadow: 0px -1px 1px rgba(196, 196, 196, 0.75);
   resize: vertical;
+  font-size: 1rem;
+  font-family: "Microsoft JhengHei";
 }
 input,
 .add-news-btn,
@@ -69,7 +74,6 @@ textarea {
   width: 100%;
   margin: 0 auto;
 }
-input,
 .add-news-btn,
 .cancel-btn {
   height: 3em;
