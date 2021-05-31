@@ -240,7 +240,7 @@ h2 {
     margin: 0 auto;
   }
   .title-container {
-    margin: 0 7em 0.6em 7em;
+    margin: 0 7em 0.2em 7em;
   }
   .grid-container {
     border: none;
@@ -277,7 +277,7 @@ h2 {
     padding: 0 0.4em;
   }
   form {
-    margin: 0.5em 5em 3em 5em;
+    margin: 0.5em 12.5% 3em 12.5%;
   }
   form::before {
     transform: rotate(-1deg);
