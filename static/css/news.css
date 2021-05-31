@@ -1,5 +1,5 @@
 .title-container {
-  margin: 0 1.6em;
+  margin: 0 1.6em 0.7em 1.6em;
 }
 .grid-container {
   display: grid;
@@ -107,8 +107,8 @@ textarea::placeholder {
   background-color: rgb(238, 238, 238);
 }
 form {
-  margin: 0.5em 0 3em 0;
-  padding: 1.5em 1em 3em 1em;
+  margin: 0.5em 0.2em 3em 0.2em;
+  padding: 1.5em 0.8em 3em 0.8em;
   position: relative;
   background: #fff;
 }
@@ -240,7 +240,7 @@ h2 {
     margin: 0 auto;
   }
   .title-container {
-    margin: 0 7em;
+    margin: 0 7em 0.6em 7em;
   }
   .grid-container {
     border: none;

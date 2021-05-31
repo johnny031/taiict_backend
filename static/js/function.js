@@ -130,3 +130,8 @@ function reset_form() {
     $(".add-news-btn").html("新增")
     $(".file-list").empty();
 }
+function show_form() {
+    $("form[name='add-news-form']").show();
+    $(".news-data-div").hide();
+    $("html, body").animate({ scrollTop: $("form[name='add-news-form']").offset().top - 15 }, 0);
+}

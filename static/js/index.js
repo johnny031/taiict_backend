@@ -1,8 +1,4 @@
 let edit = "";
-$(".show-add-card").on("click", function () {
-  $("form[name='add-news-form']").show();
-  $(".news-data-div").hide();
-})
 $(document).on("click", ".edit-btn", function () {
   if (!check_data($(this).attr("id"))) return false;
   edit = $(this).attr("id");
@@ -10,13 +6,12 @@ $(document).on("click", ".edit-btn", function () {
   $(this).parent(".edit-grid").prevUntil(".btn-grid").each(function () {
     data.push(plainTextToTag($(this).html()));
   });
-  $("form[name='add-news-form']").show();
-  $(".news-data-div").hide();
   $(".add-news-title").html("編輯最新消息")
   $("input[name=author]").val(data[4]);
   $("input[name=title]").val(data[2]);
   $("textarea[name=content]").val(data[1]);
   $(".add-news-btn").html("更新");
+  show_form();
   if (data[0] === "0") return false;
   $.ajax({
     method: "POST",
