@@ -29,6 +29,10 @@ $(document).on("click", ".edit-btn", function () {
     },
     success: function (data) {
       $('.loader').hide();
+      if (typeof data !== "object") {
+        alert("取得檔案失敗，請重新整理後再試一次")
+        return false;
+      }
       $('.add-news-btn, .cancel-btn').prop('disabled', false);
       for (let i = 0; i < data.length; i++) {
         $(".file-list").append(`
@@ -108,10 +112,7 @@ $(".add-news-btn").on("click", function () {
       return;
     },
   });
-  edit = "";
-  $(".add-news-title").html("新增最新消息")
-  $(".add-news-btn").html("新增")
-  $(".file-list").empty();
+  reset_form();
 });
 $("#FileUpload").on("change", function () {
   if ($(this).val() === "") return false;
@@ -186,13 +187,6 @@ $(document).on("click", ".delete-file", function () {
     data: { "file_id": file_id },
   });
   $(this).parent("li").remove();
-})
-$(".cancel-btn").on("click", function () {
-  $("form[name='add-news-form']").hide();
-  $(".news-data-div").show();
-  $("input[name='author'], input[name='title'], textarea[name='content'], input[type='file']").val("");
-  $(".file-list").empty();
-  edit = "";
 })
 $(".close").on("click", function () {
   $(".alert-message").hide();

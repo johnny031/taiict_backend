@@ -31,8 +31,6 @@ function processData() {
         alert("字數過多，字數限制為：類別50字，標題80字，內容3000字");
         return false;
     }
-    $("form[name='add-news-form']").hide();
-    $(".news-data-div").show();
     let file_field = $(".delete-file").length;
     let news_data = new FormData();
     $(".delete-file").each(function () {
@@ -41,7 +39,6 @@ function processData() {
     news_data.append("author", author);
     news_data.append("title", title);
     news_data.append("edit", edit);
-    $("input[name=author], input[name=title], textarea[name=content], input[type='file']").val("");
     $("#FileUpload + label").html("附件");
     let content_db = is_premium
         ? content.replace(/\n/g, "<br/>")
@@ -123,4 +120,13 @@ function updateHtml(author, title, file_field, content) {
             $(element).html(tagToPlainText(list[index]));
         });
     }
+}
+function reset_form() {
+    edit = "";
+    $("form[name='add-news-form']").hide();
+    $(".news-data-div").show();
+    $("input[name='author'], input[name='title'], textarea[name='content'], input[type='file']").val("");
+    $(".add-news-title").html("新增最新消息")
+    $(".add-news-btn").html("新增")
+    $(".file-list").empty();
 }

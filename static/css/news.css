@@ -87,7 +87,6 @@ textarea::placeholder {
 .cancel-btn {
   font-weight: bold;
   border: none;
-  margin: 0 0 2em 0;
   border-radius: 0.6em;
   background-color: rgb(49, 110, 150);
   color: rgb(226, 243, 252);
@@ -108,8 +107,36 @@ textarea::placeholder {
   background-color: rgb(238, 238, 238);
 }
 form {
-  margin: 0;
-  padding: 1em 1em;
+  margin: 0.5em 0 3em 0;
+  padding: 1.5em 1em 3em 1em;
+  position: relative;
+  background: #fff;
+}
+form,
+form::before,
+form::after {
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+  border: 1px solid #bbb;
+}
+form::before,
+form::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: #eee;
+}
+form::before {
+  right: 0;
+  top: -2px;
+  transform: rotate(-1.7deg);
+  z-index: -1;
+}
+form::after {
+  top: 2px;
+  right: 0;
+  transform: rotate(1.7deg);
+  z-index: -2;
 }
 h2,
 h4 {
@@ -119,6 +146,7 @@ h4 {
   font-family: "STHeiti";
   margin: 1em 0;
   color: rgb(119, 119, 119);
+  text-shadow: 2px 2px rgb(230, 230, 230);
 }
 h1 {
   color: rgb(58, 58, 58);
@@ -129,8 +157,8 @@ h1 {
 h2 {
   font-family: "STFangsong";
   color: rgb(83, 83, 83);
-  text-shadow: 1px 1px 0 rgb(212, 212, 212);
-  padding-bottom: 0.3em;
+  text-shadow: 2px 2px 0 rgb(245, 245, 245), 0 5px 15px rgb(211, 211, 211);
+  padding-bottom: 0.6em;
 }
 .logout-div {
   float: right;
@@ -228,7 +256,7 @@ h2 {
     font-size: 0.9rem;
   }
   .add-news-card {
-    width: 70%;
+    width: 75%;
     margin: 0 auto;
   }
   #FileUpload + label {
@@ -237,6 +265,9 @@ h2 {
   .show-add-card {
     margin-bottom: 5em;
   }
+  form {
+    margin: 0.5em 2em 3em 2em;
+  }
 }
 @media only screen and (min-width: 1012px) {
   .container {
@@ -244,5 +275,14 @@ h2 {
   }
   .grid-item {
     padding: 0 0.4em;
+  }
+  form {
+    margin: 0.5em 5em 3em 5em;
+  }
+  form::before {
+    transform: rotate(-1deg);
+  }
+  form::after {
+    transform: rotate(1deg);
   }
 }
