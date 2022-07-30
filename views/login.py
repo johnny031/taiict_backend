@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
-from models import User
+from models import User, db
 from sqlalchemy import func
 from werkzeug.security import check_password_hash
 from flask_login import login_user
+
+from werkzeug.security import generate_password_hash
 
 login = Blueprint("login", __name__)
 

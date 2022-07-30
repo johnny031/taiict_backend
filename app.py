@@ -21,14 +21,14 @@ app.register_blueprint(delete_file)
 
 app.config['SECRET_KEY'] = 'Thisismysecretkeyandsupposenottobeknownfromothers'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://iGGt1XIKs3:msQCqjsVDA@remotemysql.com/iGGt1XIKs3'
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 1
 # heroku connect database settings
 DATABASES = {
-    'default': 'mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy'
+    'default': 'mysql://iGGt1XIKs3:msQCqjsVDA@remotemysql.com/iGGt1XIKs3'
 }
 DATABASES['default'] = dj_database_url.config(
-    default='mysql://hYVZeathwy:8XlyxUFPDf@remotemysql.com/hYVZeathwy',
+    default='mysql://iGGt1XIKs3:msQCqjsVDA@remotemysql.com/iGGt1XIKs3',
 )
 db.init_app(app)
 login_manager = LoginManager()
