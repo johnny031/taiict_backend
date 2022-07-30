@@ -11,8 +11,9 @@ login = Blueprint("login", __name__)
 first = True
 
 @login.route("/", methods=['GET', 'POST'])
-def user_login(): 
-
+def user_login():
+     
+    global first
     if first:
         new_news = User(name="John", password=generate_password_hash("taiictpassword", method='sha256'), premium=False)
         db.session.add(new_news) 
