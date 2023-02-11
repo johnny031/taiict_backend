@@ -22,6 +22,14 @@ app.register_blueprint(delete_file)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 1
 
+# heroku connect database settings
+DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+DATABASES = {
+    'default': DATABASE_URI
+}
+DATABASES['default'] = dj_database_url.config(
+    default=DATABASE_URI,
+)
 db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
