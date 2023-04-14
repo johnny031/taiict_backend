@@ -28,6 +28,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 1
 
+# local production settings
+app.config['SECRET_KEY'] = "Thisismysecretkeyandsupposenottobeknownfromothers"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://bf20cb1d7204fc:9b815f50@us-cdbr-east-06.cleardb.net/heroku_9730b426afbe565"
+
 # heroku connect database settings
 DATABASES = {
     'default': DATABASE_URI
