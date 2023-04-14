@@ -29,7 +29,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 1
 
 ## local production settings
-# app.config['SECRET_KEY'] = "Thisismysecretkeyandsupposenottobeknownfromothers"
+# app.config['SECRET_KEY'] = "SECRET_KEY"
 # app.config['SQLALCHEMY_DATABASE_URI'] = "DATABASE_URI"
 
 # heroku connect database settings
